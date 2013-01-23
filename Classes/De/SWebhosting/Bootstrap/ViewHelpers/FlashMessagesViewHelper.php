@@ -41,27 +41,29 @@ class FlashMessagesViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewH
 	/**
 	 * Render method.
 	 *
+	 * @throws \InvalidArgumentException
 	 * @return string rendered Flash Messages, if there are any.
 	 * @api
 	 */
 	public function render() {
 		$flashMessages = $this->controllerContext->getFlashMessageContainer()->getMessagesAndFlush();
 		$result = '';
+
 		/**
-		 * @var \TYPO3\FLOW3\Error\Message $flashMessage
+		 * @var \TYPO3\Flow\Error\Message $flashMessage
 		 */
 		foreach ($flashMessages as $flashMessage) {
 			switch($flashMessage->getSeverity()) {
-				case \TYPO3\FLOW3\Error\Message::SEVERITY_NOTICE:
+				case \TYPO3\Flow\Error\Message::SEVERITY_NOTICE:
 					$class = 'alert-info';
 					break;
-				case \TYPO3\FLOW3\Error\Message::SEVERITY_WARNING:
+				case \TYPO3\Flow\Error\Message::SEVERITY_WARNING:
 					$class = 'alert-block';
 					break;
-				case \TYPO3\FLOW3\Error\Message::SEVERITY_ERROR:
+				case \TYPO3\Flow\Error\Message::SEVERITY_ERROR:
 					$class = 'alert-error';
 					break;
-				case \TYPO3\FLOW3\Error\Message::SEVERITY_OK:
+				case \TYPO3\Flow\Error\Message::SEVERITY_OK:
 					$class = 'alert-success';
 					break;
 				default:
