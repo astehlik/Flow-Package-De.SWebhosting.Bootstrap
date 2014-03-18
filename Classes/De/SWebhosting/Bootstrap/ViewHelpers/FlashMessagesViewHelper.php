@@ -2,7 +2,8 @@
 namespace De\SWebhosting\Bootstrap\ViewHelpers;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "Bootstrap".                  *
+ * This script belongs to the TYPO3 Flow package                          *
+ * "De.SWebhosting.Bootstrap".                                            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -11,6 +12,7 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use TYPO3\Flow\Error\Message;
 
 /**
  * View helper which renders the flash messages (if there are any) as an unsorted list.
@@ -41,29 +43,29 @@ class FlashMessagesViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewH
 	/**
 	 * Render method.
 	 *
+	 * @param boolean $renderCloseButton If TRUE a close button will be rendered in the flash messages.
 	 * @throws \InvalidArgumentException
 	 * @return string rendered Flash Messages, if there are any.
-	 * @api
 	 */
-	public function render() {
+	public function render($renderCloseButton = FALSE) {
 		$flashMessages = $this->controllerContext->getFlashMessageContainer()->getMessagesAndFlush();
 		$result = '';
 
 		/**
-		 * @var \TYPO3\Flow\Error\Message $flashMessage
+		 * @var Message $flashMessage
 		 */
 		foreach ($flashMessages as $flashMessage) {
-			switch($flashMessage->getSeverity()) {
-				case \TYPO3\Flow\Error\Message::SEVERITY_NOTICE:
+			switch ($flashMessage->getSeverity()) {
+				case Message::SEVERITY_NOTICE:
 					$class = 'alert-info';
 					break;
-				case \TYPO3\Flow\Error\Message::SEVERITY_WARNING:
-					$class = 'alert-block';
+				case Message::SEVERITY_WARNING:
+					$class = 'alert-warning';
 					break;
-				case \TYPO3\Flow\Error\Message::SEVERITY_ERROR:
-					$class = 'alert-error';
+				case Message::SEVERITY_ERROR:
+					$class = 'alert-danger';
 					break;
-				case \TYPO3\Flow\Error\Message::SEVERITY_OK:
+				case Message::SEVERITY_OK:
 					$class = 'alert-success';
 					break;
 				default:
@@ -72,6 +74,10 @@ class FlashMessagesViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewH
 			}
 
 			$result .= '<div class="alert ' . $class . '">';
+
+			if ($renderCloseButton) {
+				$result .= '<a class="close" data-dismiss="alert" href="#">×</a>';
+			}
 
 			$title = $flashMessage->getTitle();
 			if (!empty($title)) {
@@ -84,5 +90,3 @@ class FlashMessagesViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewH
 		return $result;
 	}
 }
-
-?>

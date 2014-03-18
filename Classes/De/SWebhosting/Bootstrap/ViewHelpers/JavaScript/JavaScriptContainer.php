@@ -2,7 +2,8 @@
 namespace De\SWebhosting\Bootstrap\ViewHelpers\JavaScript;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "Bootstrap".                  *
+ * This script belongs to the TYPO3 Flow package                          *
+ * "De.SWebhosting.Bootstrap".                                            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -19,13 +20,6 @@ use TYPO3\Flow\Annotations as Flow;
 class JavaScriptContainer {
 
 	/**
-	 * Stores the JavaScript code for the different sections
-	 *
-	 * @var array
-	 */
-	protected $sections = array();
-
-	/**
 	 * Contains all loaded ids
 	 *
 	 * @var array
@@ -33,16 +27,11 @@ class JavaScriptContainer {
 	protected $loadedIds = array();
 
 	/**
-	 * Appends the given javascript src to the given section and marks the
-	 * given id as loaded if it is not null
+	 * Stores the JavaScript code for the different sections
 	 *
-	 * @param string $src The JavaScript src that should be loaded
-	 * @param string $id An optional ID that will be marked as loaded
-	 * @param string $section The section to which the src is appended to (footer by default)
+	 * @var array
 	 */
-	public function appendSrcToSection($src, $id = NULL, $section = 'footer') {
-		$this->appendToSection('<script type="text/javascript" src="' . $src . '"></script>', $id, $section);
-	}
+	protected $sections = array();
 
 	/**
 	 * Appends the given javascript code to the given section and marks the
@@ -54,6 +43,18 @@ class JavaScriptContainer {
 	 */
 	public function appendScriptToSection($script, $id = NULL, $section = 'footer') {
 		$this->appendToSection($script, $id, $section);
+	}
+
+	/**
+	 * Appends the given javascript src to the given section and marks the
+	 * given id as loaded if it is not null
+	 *
+	 * @param string $src The JavaScript src that should be loaded
+	 * @param string $id An optional ID that will be marked as loaded
+	 * @param string $section The section to which the src is appended to (footer by default)
+	 */
+	public function appendSrcToSection($src, $id = NULL, $section = 'footer') {
+		$this->appendToSection('<script type="text/javascript" src="' . $src . '"></script>', $id, $section);
 	}
 
 	/**
@@ -71,7 +72,7 @@ class JavaScriptContainer {
 		} else {
 
 			if (!$optional) {
-				throw new \Exception('A required JavaScript section was empty: ' .$section);
+				throw new \Exception('A required JavaScript section was empty: ' . $section);
 			}
 
 			return '';
@@ -116,7 +117,7 @@ class JavaScriptContainer {
 			$this->sections[$section] = '';
 		}
 
-		$this->sections[$section] .= $script. PHP_EOL;
+		$this->sections[$section] .= $script . PHP_EOL;
 
 		$this->markIdAsLoaded($id);
 	}
@@ -135,5 +136,3 @@ class JavaScriptContainer {
 		$this->loadedIds[$id] = TRUE;
 	}
 }
-
-?>

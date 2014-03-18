@@ -1,0 +1,26 @@
+<f:section name="flashMessage">
+	<div class="alert {alertClass}">
+		<a class="close" data-dismiss="alert" href="#">×</a>
+		<f:if condition="{flashMessage.title}">
+			<h4 class="alert-heading">{flashMessage.title}</h4>
+		</f:if>
+		{flashMessage}
+	</div>
+</f:section>
+
+<f:flashMessages as="flashMessages">
+	<f:for each="{flashMessages}" as="flashMessage">
+		<f:if condition="{flashMessage.severity} == 'OK'">
+			<f:render section="flashMessage" arguments="flashMessage: flashMessage, alertClass: 'alert-success'" />
+		</f:if>
+		<f:if condition="{flashMessage.severity} == 'Notice'">
+			<f:render section="flashMessage" arguments="flashMessage: flashMessage, alertClass: 'alert-notice'" />
+		</f:if>
+		<f:if condition="{flashMessage.severity} == 'Warning'">
+			<f:render section="flashMessage" arguments="flashMessage: flashMessage, alertClass: 'alert-warning'" />
+		</f:if>
+		<f:if condition="{flashMessage.severity} == 'Error'">
+			<f:render section="flashMessage" arguments="flashMessage: flashMessage, alertClass: 'alert-danger'" />
+		</f:if>
+	</f:for>
+</f:flashMessages>

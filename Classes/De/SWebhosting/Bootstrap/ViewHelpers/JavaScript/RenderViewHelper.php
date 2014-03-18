@@ -2,7 +2,8 @@
 namespace De\SWebhosting\Bootstrap\ViewHelpers\JavaScript;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "Bootstrap".                  *
+ * This script belongs to the TYPO3 Flow package                          *
+ * "De.SWebhosting.Bootstrap".                                            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -13,6 +14,9 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\JavaScript;
 
 use TYPO3\Flow\Annotations as Flow;
 
+/**
+ * Renders JavaScript code that was registered for the given section.
+ */
 class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
@@ -22,11 +26,9 @@ class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 	protected $javascriptContainer;
 
 	/**
-	 * Render method.
+	 * Renders JavaScript code that was registered for the given section.
 	 */
 	public function render($section = 'footer') {
 		return $this->javascriptContainer->getSectionContent($section);
 	}
 }
-
-?>

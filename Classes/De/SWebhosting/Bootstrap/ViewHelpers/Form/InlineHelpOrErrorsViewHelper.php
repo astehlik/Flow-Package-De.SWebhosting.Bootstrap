@@ -2,7 +2,8 @@
 namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "Bootstrap".                  *
+ * This script belongs to the TYPO3 Flow package                          *
+ * "De.SWebhosting.Bootstrap".                                            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -11,15 +12,15 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
- *
+ * Displays validation errors as inline helptext.
  */
-class InlineHelpOrErrorsViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
+class InlineHelpOrErrorsViewHelper extends AbstractViewHelper {
 
 	/**
-	 * Render method.
-	 *
+	 * Displays validation errors as inline helptext.
 	 *
 	 * @param string $validationResultsVariableName
 	 * @return string
@@ -36,9 +37,9 @@ class InlineHelpOrErrorsViewHelper extends \TYPO3\Fluid\Core\ViewHelper\Abstract
 			$validationResult = $this->templateVariableContainer->get($validationResultsVariableName);
 
 			if (isset($validationResult)) {
-				$messages = $validationResult->getFlattenedNotices();
-				$messages = array_merge($messages, $validationResult->getFlattenedWarnings());
-				$messages = array_merge($messages, $validationResult->getFlattenedErrors());
+				$messages = $this->getFattenedMessages($validationResult->getFlattenedErrors());
+				$messages = array_merge($messages, $this->getFattenedMessages($validationResult->getFlattenedWarnings()));
+				$messages = array_merge($messages, $this->getFattenedMessages($validationResult->getFlattenedNotices()));
 				$finalOutput = implode('<br />', $messages);
 			}
 		}
@@ -48,11 +49,23 @@ class InlineHelpOrErrorsViewHelper extends \TYPO3\Fluid\Core\ViewHelper\Abstract
 		}
 
 		if (!empty($finalOutput)) {
-			$finalOutput = '<span class="help-inline">' . $finalOutput . '</span>';
+			$finalOutput = '<span class="help-block">' . $finalOutput . '</span>';
 		}
 
 		return $finalOutput;
 	}
-}
 
-?>
+	/**
+	 * Flattens the given array of property messages.
+	 *
+	 * @param array $propertyMessages
+	 * @return \TYPO3\Flow\Error\Message[]
+	 */
+	protected function getFattenedMessages($propertyMessages) {
+		$messages = array();
+		foreach ($propertyMessages as $messageArray) {
+			$messages = array_merge($messages, $messageArray);
+		}
+		return $messages;
+	}
+}

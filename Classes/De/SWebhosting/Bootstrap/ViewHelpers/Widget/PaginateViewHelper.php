@@ -25,5 +25,3 @@ class PaginateViewHelper extends \TYPO3\Fluid\ViewHelpers\Widget\PaginateViewHel
 	 */
 	protected $controller;
 }
-
-?>

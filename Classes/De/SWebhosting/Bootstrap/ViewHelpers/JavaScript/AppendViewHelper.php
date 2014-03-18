@@ -2,7 +2,8 @@
 namespace De\SWebhosting\Bootstrap\ViewHelpers\JavaScript;
 
 /*                                                                        *
- * This script belongs to the FLOW3 package "Bootstrap".                  *
+ * This script belongs to the TYPO3 Flow package                          *
+ * "De.SWebhosting.Bootstrap".                                            *
  *                                                                        *
  * It is free software; you can redistribute it and/or modify it under    *
  * the terms of the GNU Lesser General Public License, either version 3   *
@@ -13,6 +14,9 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\JavaScript;
 
 use TYPO3\Flow\Annotations as Flow;
 
+/**
+ * Appends JavaScript code to a section.
+ */
 class AppendViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
@@ -22,18 +26,16 @@ class AppendViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 	protected $javascriptContainer;
 
 	/**
-	 * Render method.
+	 * Appends JavaScript code to a section.
 	 */
 	public function render($script = NULL, $src = NULL, $section = 'footer') {
 
 		if (isset($script)) {
-			$this->javascriptContainer->appendScriptToSection($script);
+			$this->javascriptContainer->appendScriptToSection($script, NULL, $section);
 		} else if (isset($src)) {
-			$this->javascriptContainer->appendSrcToSection($src);
+			$this->javascriptContainer->appendSrcToSection($src, NULL, $section);
 		} else {
 			throw new \TYPO3\Flow\Mvc\Exception\RequiredArgumentMissingException('Either "src" or "script" is required as an argument for this view helper.');
 		}
 	}
 }
-
-?>
