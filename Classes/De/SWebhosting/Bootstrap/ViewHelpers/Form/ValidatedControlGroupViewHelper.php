@@ -27,9 +27,10 @@ class ValidatedControlGroupViewHelper extends AbstractViewHelper {
 	 * @param string $errorClass The class that should be added when validation errors are found.
 	 * @param string $warningClass The class that should be added when validation warnings are found.
 	 * @param string $infoClass The class that should be added when validation notices are found.
+	 * @param string $class An additional class attribute that will always be rendered.
 	 * @return string
 	 */
-	public function render($for = '', $as = 'validationResults', $errorClass = 'has-error', $warningClass = 'has-warning', $infoClass = 'has-notice') {
+	public function render($for = '', $as = 'validationResults', $errorClass = 'has-error', $warningClass = 'has-warning', $infoClass = 'has-notice', $class = '') {
 
 		$finalClass = 'form-group';
 
@@ -47,6 +48,10 @@ class ValidatedControlGroupViewHelper extends AbstractViewHelper {
 			} elseif ($validationResults->hasNotices()) {
 				$finalClass .= ' ' . $infoClass;
 			}
+		}
+
+		if (!empty($class)) {
+			$finalClass .= empty($finalClass) ? $class : ' ' . $class;
 		}
 
 		$result = '<div class="' . $finalClass . '">';
