@@ -51,7 +51,13 @@
 				},
 				settings.popover
 			);
+
+			var originalTitle = popoverTrigger.attr('title');
 			var popover = popoverTrigger.popover(popoverSettings);
+
+			// Somehow the popover kills the title from the title attribute.
+			// This is why we restore it after the popover is initialized.
+			popoverTrigger.attr('title', originalTitle);
 
 			popoverTrigger.click(function(e) {
 				e.preventDefault();
