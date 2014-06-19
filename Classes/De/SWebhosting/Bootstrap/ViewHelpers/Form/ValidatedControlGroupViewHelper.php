@@ -55,7 +55,7 @@ class ValidatedControlGroupViewHelper extends AbstractViewHelper {
 		}
 
 		$result = '<div class="' . $finalClass . '">';
-		$this->templateVariableContainer->add($as, $validationResults);
+		$this->templateVariableContainer->add($as, array('validationResults' => $validationResults, 'for' => $for));
 		$result .= $this->renderChildren();
 		$this->templateVariableContainer->remove($as);
 		$result .= '</div>';

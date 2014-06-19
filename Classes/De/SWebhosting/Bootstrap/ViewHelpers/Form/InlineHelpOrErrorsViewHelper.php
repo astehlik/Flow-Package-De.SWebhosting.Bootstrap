@@ -13,11 +13,18 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
  *                                                                        */
 
 use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\Flow\Annotations as Flow;
 
 /**
  * Displays validation errors as inline helptext.
  */
 class InlineHelpOrErrorsViewHelper extends AbstractViewHelper {
+
+	/**
+	 * @Flow\Inject
+	 * @var \TYPO3\Flow\I18n\Translator
+	 */
+	protected $translator;
 
 	/**
 	 * Displays validation errors as inline helptext.
@@ -34,13 +41,31 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper {
 		 */
 		if ($this->templateVariableContainer->exists($validationResultsVariableName)) {
 
-			$validationResult = $this->templateVariableContainer->get($validationResultsVariableName);
+			$validationResultData = $this->templateVariableContainer->get($validationResultsVariableName);
+			$validationResult = $validationResultData['validationResults'];
+			$for = $validationResultData['for'] ? $validationResultData['for'] . '.' : '';
+
+			/** @var \TYPO3\Flow\Mvc\ActionRequest $request */
+			$request = $this->controllerContext->getRequest();
+
+			$idPrefix = 'error.' . lcfirst($request->getControllerName()) . '.' . $request->getControllerActionName() . $for;
 
 			if (isset($validationResult)) {
 				$messages = $this->getFattenedMessages($validationResult->getFlattenedErrors());
 				$messages = array_merge($messages, $this->getFattenedMessages($validationResult->getFlattenedWarnings()));
 				$messages = array_merge($messages, $this->getFattenedMessages($validationResult->getFlattenedNotices()));
-				$finalOutput = implode('<br />', $messages);
+
+				$translatedMessages = array();
+				/** @var \TYPO3\Flow\Error\Message $message */
+				foreach ($messages as $message) {
+					$id = $idPrefix . $message->getCode();
+					$translatedMessage = $this->translator->translateById($id, array(), NULL, NULL, 'Main', $request->getControllerPackageKey());
+					if ($id === $translatedMessage) {
+						$translatedMessage = $message . ' [' . $id . ']';
+					}
+					$translatedMessages[] = $translatedMessage;
+				}
+				$finalOutput = implode('<br />', $translatedMessages);
 			}
 		}
 
