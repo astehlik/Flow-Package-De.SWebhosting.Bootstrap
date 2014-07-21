@@ -48,7 +48,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper {
 			/** @var \TYPO3\Flow\Mvc\ActionRequest $request */
 			$request = $this->controllerContext->getRequest();
 
-			$idPrefix = 'error.' . lcfirst($request->getControllerName()) . '.' . $request->getControllerActionName() . $for;
+			$idPrefix = 'error.' . lcfirst($request->getControllerName()) . '.' . $request->getControllerActionName() . '.' . $for;
 
 			if (isset($validationResult)) {
 				$messages = $this->getFattenedMessages($validationResult->getFlattenedErrors());
