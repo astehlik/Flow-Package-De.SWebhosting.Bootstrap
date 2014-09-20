@@ -12,8 +12,8 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3\Flow\Annotations as Flow;
+use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Displays validation errors as inline helptext.
@@ -27,47 +27,28 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper {
 	protected $translator;
 
 	/**
+	 * Initialize all arguments.
+	 *
+	 * @return void
+	 */
+	public function initializeArguments() {
+		$this->registerArgument('validationResultsVariableName', 'string', '', FALSE, 'validationResults');
+		$this->registerArgument('translationPrefix', 'string', '', FALSE, 'error.');
+		$this->registerArgument('additionalPropertyPrefix', 'string', '', FALSE, '');
+		$this->registerArgument('flattenMessages', 'boolean', '', FALSE, TRUE);
+		$this->registerArgument('forProperties', 'array', '');
+		$this->registerArgument('includeChildProperties', 'array', '');
+	}
+
+
+	/**
 	 * Displays validation errors as inline helptext.
 	 *
-	 * @param string $validationResultsVariableName
 	 * @return string
 	 */
-	public function render($validationResultsVariableName = 'validationResults') {
+	public function render() {
 
-		$finalOutput = '';
-
-		/**
-		 * @var \TYPO3\Flow\Error\Result $validationResult
-		 */
-		if ($this->templateVariableContainer->exists($validationResultsVariableName)) {
-
-			$validationResultData = $this->templateVariableContainer->get($validationResultsVariableName);
-			$validationResult = $validationResultData['validationResults'];
-			$for = $validationResultData['for'] ? $validationResultData['for'] . '.' : '';
-
-			/** @var \TYPO3\Flow\Mvc\ActionRequest $request */
-			$request = $this->controllerContext->getRequest();
-
-			$idPrefix = 'error.' . lcfirst($request->getControllerName()) . '.' . $request->getControllerActionName() . '.' . $for;
-
-			if (isset($validationResult)) {
-				$messages = $this->getFattenedMessages($validationResult->getFlattenedErrors());
-				$messages = array_merge($messages, $this->getFattenedMessages($validationResult->getFlattenedWarnings()));
-				$messages = array_merge($messages, $this->getFattenedMessages($validationResult->getFlattenedNotices()));
-
-				$translatedMessages = array();
-				/** @var \TYPO3\Flow\Error\Message $message */
-				foreach ($messages as $message) {
-					$id = $idPrefix . $message->getCode();
-					$translatedMessage = $this->translator->translateById($id, array(), NULL, NULL, 'Main', $request->getControllerPackageKey());
-					if ($id === $translatedMessage) {
-						$translatedMessage = $message . ' [' . $id . ']';
-					}
-					$translatedMessages[] = $translatedMessage;
-				}
-				$finalOutput = implode('<br />', $translatedMessages);
-			}
-		}
+		$finalOutput = $this->getErrorMessages();
 
 		if (empty($finalOutput)) {
 			$finalOutput = $this->renderChildren();
@@ -78,6 +59,107 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper {
 		}
 
 		return $finalOutput;
+	}
+
+	/**
+	 * Builds the translated error messages for the given parameters.
+	 *
+	 * @param \TYPO3\Flow\Error\Result $validationResult
+	 * @param string $forProperty
+	 * @param string $originalProperty
+	 * @param boolean $includeChildProperties
+	 * @return string
+	 */
+	protected function buildErrorMessages($validationResult, $forProperty, $originalProperty, $includeChildProperties) {
+
+		$errorMessages = array();
+
+		/** @var \TYPO3\Flow\Mvc\ActionRequest $request */
+		$request = $this->controllerContext->getRequest();
+
+		$for = $this->arguments['additionalPropertyPrefix'] . ($originalProperty ? $originalProperty . '.' : '');
+		$translationPrefix = $this->arguments['translationPrefix'];
+		$controllerPrefix = $translationPrefix . 'controller.' . lcfirst($request->getControllerName()) . '.' . $request->getControllerActionName() . '.' . $for;
+		$propertyPrefix = $translationPrefix . 'property.' . $for;
+		$genericPrefix = $translationPrefix . 'generic.';
+
+		$forSubProperty = substr($forProperty, strlen($originalProperty) + 1);
+		if ($forSubProperty) {
+			$controllerPrefix .= $forSubProperty . '.';
+			$propertyPrefix .= $forSubProperty . '.';
+			$validationResult = $validationResult->forProperty($forSubProperty);
+		}
+
+		if ($includeChildProperties) {
+			$messages = $this->getFattenedMessages($validationResult->getFlattenedErrors());
+			$messages = array_merge($messages, $this->getFattenedMessages($validationResult->getFlattenedWarnings()));
+			$messages = array_merge($messages, $this->getFattenedMessages($validationResult->getFlattenedNotices()));
+		} else {
+			$messages = $validationResult->getErrors();
+			$messages = array_merge($messages, $validationResult->getWarnings());
+			$messages = array_merge($messages, $validationResult->getNotices());
+		}
+
+		if (empty($messages)) {
+			return $errorMessages;
+		}
+
+		/** @var \TYPO3\Flow\Error\Message $message */
+		foreach ($messages as $message) {
+			$controllerId = $controllerPrefix . $message->getCode();
+			$translatedMessage = $this->translateById($controllerId);
+			if ($translatedMessage === $controllerId) {
+				$propertyId = $propertyPrefix . $message->getCode();
+				$translatedMessage = $this->translateById($propertyId);
+				if ($translatedMessage === $propertyId) {
+					$genericId = $genericPrefix . $message->getCode();
+					$translatedMessage = $this->translateById($genericId);
+					if ($genericId === $translatedMessage) {
+						$translatedMessage = $message . ' [' . $controllerId . ' or ' . $propertyId . ' or ' . $genericId . ']';
+					}
+				}
+			}
+			$errorMessages[] = $translatedMessage;
+		}
+
+		return $errorMessages;
+	}
+
+	/**
+	 * Renders all error messages to a string seperated by line breaks.
+	 *
+	 * @return string
+	 * @throws \TYPO3\Fluid\Core\ViewHelper\Exception\InvalidVariableException
+	 */
+	protected function getErrorMessages() {
+
+		$errorMessages = '';
+
+		if (!$this->templateVariableContainer->exists($this->arguments['validationResultsVariableName'])) {
+			return $errorMessages;
+		}
+
+		$validationResultData = $this->templateVariableContainer->get($this->arguments['validationResultsVariableName']);
+
+		/** @var \TYPO3\Flow\Error\Result $validationResult */
+		$validationResult = $validationResultData['validationResults'];
+		if (!isset($validationResult)) {
+			return $errorMessages;
+		}
+
+		$for = $validationResultData['for'];
+		$errorMessageArray = array();
+		if (!isset($this->arguments['forProperties'])) {
+			$errorMessageArray = $this->buildErrorMessages($validationResult, $for, $for, TRUE);
+		} else {
+			foreach ($this->arguments['forProperties'] as $index => $propertyPath) {
+				$includeChildProperties = isset($this->arguments['includeChildProperties'][$index]) ? (bool)$this->arguments['includeChildProperties'][$index] : TRUE;
+				$errorMessageArray = array_merge($errorMessageArray, $this->buildErrorMessages($validationResult, $propertyPath, $for, $includeChildProperties));
+			}
+		}
+		$errorMessages = implode('<br />', $errorMessageArray);
+
+		return $errorMessages;
 	}
 
 	/**
@@ -92,5 +174,17 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper {
 			$messages = array_merge($messages, $messageArray);
 		}
 		return $messages;
+	}
+
+	/**
+	 * Returns the translation for the given ID.
+	 *
+	 * @param string $id
+	 * @return string
+	 */
+	protected function translateById($id) {
+		/** @var \TYPO3\Flow\Mvc\ActionRequest $request */
+		$request = $this->controllerContext->getRequest();
+		return $this->translator->translateById($id, array(), NULL, NULL, 'Main', $request->getControllerPackageKey());
 	}
 }
