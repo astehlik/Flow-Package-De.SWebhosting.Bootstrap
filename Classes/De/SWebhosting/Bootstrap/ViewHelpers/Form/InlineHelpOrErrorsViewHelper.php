@@ -38,6 +38,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper {
 		$this->registerArgument('flattenMessages', 'boolean', '', FALSE, TRUE);
 		$this->registerArgument('forProperties', 'array', '');
 		$this->registerArgument('includeChildProperties', 'array', '');
+		$this->registerArgument('excludeForPartsFromTranslationKey', 'array', '');
 	}
 
 
@@ -77,7 +78,16 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper {
 		/** @var \TYPO3\Flow\Mvc\ActionRequest $request */
 		$request = $this->controllerContext->getRequest();
 
-		$for = $this->arguments['additionalPropertyPrefix'] . ($originalProperty ? $originalProperty . '.' : '');
+		$for = $originalProperty;
+		if (!empty($this->arguments['excludeForPartsFromTranslationKey']) && $for) {
+			$forParts = explode('.', $for);
+			foreach($this->arguments['excludeForPartsFromTranslationKey'] as $excludeKey) {
+				unset($forParts[$excludeKey]);
+			}
+			$for = implode('.', $forParts);
+		}
+
+		$for = $this->arguments['additionalPropertyPrefix'] . ($for ? $for . '.' : '');
 		$translationPrefix = $this->arguments['translationPrefix'];
 		$controllerPrefix = $translationPrefix . 'controller.' . lcfirst($request->getControllerName()) . '.' . $request->getControllerActionName() . '.' . $for;
 		$propertyPrefix = $translationPrefix . 'property.' . $for;
