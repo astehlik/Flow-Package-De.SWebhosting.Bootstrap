@@ -9,7 +9,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"De\\SWebhosting\\Bootstrap": "Classes"
+			"De\\SWebhosting\\Bootstrap\\": "Classes"
 		}
 	}
 }
