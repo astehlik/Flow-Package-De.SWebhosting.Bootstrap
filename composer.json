@@ -1,15 +1,15 @@
 {
-    "name": "de\/swebhosting\/bootstrap",
-    "type": "typo3-flow-package",
-    "description": "The Bootstrap CSS Framework developed by twitter.",
-    "license": "GPL-3.0+",
-    "version": "0.0.1",
-    "require": {
-        "typo3/flow": "*"
-    },
-    "autoload": {
-        "psr-4": {
-            "De\\SWebhosting\\Bootstrap": "Classes"
-        }
-    }
+	"name": "de-swebhosting-flow-package/bootstrap",
+	"type": "typo3-flow-package",
+	"description": "Enhances the TYPO3.Twitter.Bootstrap package.",
+	"license": "GPL-3.0+",
+	"require": {
+		"typo3/twitter-bootstrap": "*",
+		"twbs/bootstrap": "~3.3"
+	},
+	"autoload": {
+		"psr-4": {
+			"De\\SWebhosting\\Bootstrap": "Classes"
+		}
+	}
 }
