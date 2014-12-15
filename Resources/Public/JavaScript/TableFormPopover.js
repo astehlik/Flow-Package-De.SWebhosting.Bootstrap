@@ -11,13 +11,16 @@
 		var toggleDeletePopover = function(tableLine, popover, settings) {
 
 			if (tableLine.find('.' + settings.classNamePrefix + 'is-open').length) {
-				closePopover(popover);
+				closePopover(tableLine, popover);
 			} else {
 				showDeletePopover(tableLine, popover);
 			}
 		};
 
-		var closePopover = function(popover) {
+		var closePopover = function(tableLine, popover) {
+
+			tableLine.removeClass(settings.classNames.tableLineHighlight);
+
 			popover.popover('hide');
 			popover.removeClass(settings.classNamePrefix + 'is-open');
 		};
@@ -33,10 +36,12 @@
 			var closeButton = tableLine.find('.' + settings.classNamePrefix + settings.classNames.closeButton);
 			closeButton.click(function(e) {
 				e.preventDefault();
-				closePopover(popover)
+				closePopover(tableLine, popover)
 			});
 
 			tableLine.find('.' + settings.classNamePrefix + settings.classNames.submitButton).focus();
+
+			tableLine.addClass(settings.classNames.tableLineHighlight);
 		};
 
 		this.initialize = function(tableLine, globalSettings) {
@@ -69,24 +74,28 @@
 	$.fn.tableFormPopover = function(options) {
 
 		// This is the easiest way to have default options.
-		var settings = $.extend(
-			{
-				classNamePrefix: 'de-swebhosting-bootstrap-table-popover-',
-				identifierAttribute: 'data-de-swebhosting-bootstrap-table-popover-identifier',
-				popover: {
-					html: true,
-					placement: 'left',
-					trigger: 'manual'
-				},
-				classNames: {
-					identifier: 'identifier',
-					identifierInput: 'input',
-					popoverTrigger: 'trigger',
-					popoverContentContainer: 'content',
-					closeButton: 'close',
-					submitButton: 'submit'
-				}
+		var settings = {
+			classNamePrefix: 'de-swebhosting-bootstrap-table-popover-',
+			identifierAttribute: 'data-de-swebhosting-bootstrap-table-popover-identifier',
+			popover: {
+				html: true,
+				placement: 'left',
+				trigger: 'manual'
 			},
+			classNames: {
+				identifier: 'identifier',
+				identifierInput: 'input',
+				popoverTrigger: 'trigger',
+				popoverContentContainer: 'content',
+				closeButton: 'close',
+				submitButton: 'submit',
+				tableLineHighlight: 'danger'
+			}
+		};
+
+		$.extend(
+			true,
+			settings,
 			options
 		);
 
