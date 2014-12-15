@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+	<file original="" product-name="De.SWebhosting.Bootstrap" source-language="en" datatype="plaintext">
+		<body>
+			<trans-unit id="viewHelper.paginate.previous" xml:space="preserve">
+				<source>previous</source>
+			</trans-unit>
+			<trans-unit id="viewHelper.paginate.next" xml:space="preserve">
+				<source>next</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
