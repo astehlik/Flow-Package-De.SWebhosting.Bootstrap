@@ -22,6 +22,12 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper {
 
 	/**
 	 * @Flow\Inject
+	 * @var \TYPO3\Fluid\Core\Parser\TemplateParser
+	 */
+	protected $templateParser;
+
+	/**
+	 * @Flow\Inject
 	 * @var \TYPO3\Flow\I18n\Translator
 	 */
 	protected $translator;
@@ -81,7 +87,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper {
 		$for = $originalProperty;
 		if (!empty($this->arguments['excludeForPartsFromTranslationKey']) && $for) {
 			$forParts = explode('.', $for);
-			foreach($this->arguments['excludeForPartsFromTranslationKey'] as $excludeKey) {
+			foreach ($this->arguments['excludeForPartsFromTranslationKey'] as $excludeKey) {
 				unset($forParts[$excludeKey]);
 			}
 			$for = implode('.', $forParts);
@@ -129,7 +135,10 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper {
 					}
 				}
 			}
-			$errorMessages[] = $translatedMessage;
+			$translatedMessage = $this->templateParser->parse($translatedMessage);
+			$this->templateVariableContainer->add('message', $message);
+			$errorMessages[] = $translatedMessage->getRootNode()->evaluate($this->renderingContext);
+			$this->templateVariableContainer->remove('message');
 		}
 
 		return $errorMessages;
