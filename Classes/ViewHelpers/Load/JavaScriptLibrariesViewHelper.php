@@ -28,17 +28,17 @@ class JavaScriptLibrariesViewHelper extends \TYPO3\Fluid\Core\ViewHelper\Abstrac
 
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Resource\Publishing\ResourcePublisher
+	 * @var \TYPO3\Flow\Resource\ResourceManager
 	 */
-	protected $resourcePublisher;
+	protected $resourceManager;
 
 	/**
 	 * @return string
 	 */
 	public function render() {
 		$fileName = 'TableFormPopover.js';
-		$uri = $this->resourcePublisher->getStaticResourcesWebBaseUri() . 'Packages/De.SWebhosting.Bootstrap/JavaScript/' . $fileName;
+		$uri = $this->resourceManager->getPublicPackageResourceUri('De.SWebhosting.Bootstrap', 'JavaScript/' . $fileName);
 		$content = '<script type="text/javascript" src="' . $uri . '"></script>';
 		return $content;
 	}
-} 
+}

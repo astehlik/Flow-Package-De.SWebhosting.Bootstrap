@@ -28,9 +28,9 @@ class JqueryUiViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper
 
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Resource\Publishing\ResourcePublisher
+	 * @var \TYPO3\Flow\Resource\ResourceManager
 	 */
-	protected $resourcePublisher;
+	protected $resourceManager;
 
 	/**
 	 * @Flow\Inject(setting="useUncompressedFiles", package="De.SWebhosting.Bootstrap")
@@ -51,7 +51,7 @@ class JqueryUiViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper
 		$fileName = sprintf('jquery-ui-%s%s', $version, $custom ? '.custom' : '');
 		$fileName .= $this->useUncompressedFiles ? '.' . $type : '.min.' . $type;
 		$theme = $type === 'css' ? '/' . $theme : '';
-		$uri = $this->resourcePublisher->getStaticResourcesWebBaseUri() . 'Packages/De.SWebhosting.Bootstrap/Vendor/JQuery/Ui/' . $type . $theme . '/' . $fileName;
+		$uri = $this->resourceManager->getPublicPackageResourceUri('De.SWebhosting.Bootstrap', 'Vendor/JQuery/Ui/' . $type . $theme . '/' . $fileName);
 
 		if ($type === 'css') {
 			$content = '<link href="' . $uri . '" rel="stylesheet" media="all" type="text/css" />';
@@ -63,4 +63,4 @@ class JqueryUiViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper
 
 		return $content;
 	}
-} 
+}

@@ -28,9 +28,9 @@ class JqueryViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
 	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Resource\Publishing\ResourcePublisher
+	 * @var \TYPO3\Flow\Resource\ResourceManager
 	 */
-	protected $resourcePublisher;
+	protected $resourceManager;
 
 	/**
 	 * @Flow\Inject(setting="useUncompressedFiles", package="De.SWebhosting.Bootstrap")
@@ -46,8 +46,8 @@ class JqueryViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 	public function render($version = '2.1.0') {
 		$fileName = sprintf('jquery-%s', $version);
 		$fileName .= $this->useUncompressedFiles ? '.js' : '.min.js';
-		$uri = $this->resourcePublisher->getStaticResourcesWebBaseUri() . 'Packages/De.SWebhosting.Bootstrap/Vendor/JQuery/' . $fileName;
+		$uri = $this->resourceManager->getPublicPackageResourceUri('De.SWebhosting.Bootstrap', 'Vendor/JQuery/' . $fileName);
 		$content = '<script type="text/javascript" src="' . $uri . '"></script>';
 		return $content;
 	}
-} 
+}
