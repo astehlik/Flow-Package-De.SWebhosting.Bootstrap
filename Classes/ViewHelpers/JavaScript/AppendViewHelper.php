@@ -27,6 +27,11 @@ class AppendViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
 	 * Appends JavaScript code to a section.
+	 *
+	 * @param string $script
+	 * @param string $src
+	 * @param string $section
+	 * @throws \TYPO3\Flow\Mvc\Exception\RequiredArgumentMissingException
 	 */
 	public function render($script = NULL, $src = NULL, $section = 'footer') {
 
