@@ -21,6 +21,13 @@ use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
 class InlineHelpOrErrorsViewHelper extends AbstractViewHelper {
 
 	/**
+	 * We render HTML code and to not want it to be escaped.
+	 *
+	 * @var bool
+	 */
+	protected $escapeOutput = FALSE;
+
+	/**
 	 * @Flow\Inject
 	 * @var \TYPO3\Fluid\Core\Parser\TemplateParser
 	 */

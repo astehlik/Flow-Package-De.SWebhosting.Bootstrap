@@ -20,6 +20,13 @@ use TYPO3\Flow\Annotations as Flow;
 class JqueryViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
+	 * Disable escaping, we print HTML.
+	 *
+	 * @var bool
+	 */
+	protected $escapeOutput = FALSE;
+
+	/**
 	 * @Flow\Inject
 	 * @var \TYPO3\Flow\Resource\Publishing\ResourcePublisher
 	 */

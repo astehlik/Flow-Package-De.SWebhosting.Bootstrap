@@ -20,6 +20,13 @@ use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
 class ValidatedControlGroupViewHelper extends AbstractViewHelper {
 
 	/**
+	 * We render HTML code and to not want it to be escaped.
+	 *
+	 * @var bool
+	 */
+	protected $escapeOutput = FALSE;
+
+	/**
 	 * Displays a form control group with different classes depending on the validation state.
 	 *
 	 * @param string $for The name of the property for which the validation results should be checked.

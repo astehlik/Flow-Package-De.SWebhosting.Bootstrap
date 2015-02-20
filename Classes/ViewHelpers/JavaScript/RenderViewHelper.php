@@ -20,6 +20,13 @@ use TYPO3\Flow\Annotations as Flow;
 class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
+	 * We render HTML code and to not want it to be escaped.
+	 *
+	 * @var bool
+	 */
+	protected $escapeOutput = FALSE;
+
+	/**
 	 * @var \De\SWebhosting\Bootstrap\ViewHelpers\JavaScript\JavaScriptContainer
 	 * @Flow\Inject
 	 */
@@ -27,6 +34,9 @@ class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
 	 * Renders JavaScript code that was registered for the given section.
+	 *
+	 * @param string $section
+	 * @return string
 	 */
 	public function render($section = 'footer') {
 		return $this->javascriptContainer->getSectionContent($section);

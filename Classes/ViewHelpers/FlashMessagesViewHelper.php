@@ -41,6 +41,13 @@ use TYPO3\Flow\Error\Message;
 class FlashMessagesViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
+	 * We render HTML code and to not want it to be escaped.
+	 *
+	 * @var bool
+	 */
+	protected $escapeOutput = FALSE;
+
+	/**
 	 * Render method.
 	 *
 	 * @param boolean $renderCloseButton If TRUE a close button will be rendered in the flash messages.
