@@ -27,7 +27,7 @@ class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 	protected $escapeOutput = FALSE;
 
 	/**
-	 * @var \De\SWebhosting\Bootstrap\ViewHelpers\JavaScript\JavaScriptContainer
+	 * @var \De\SWebhosting\Bootstrap\Utility\JavaScriptContainer
 	 * @Flow\Inject
 	 */
 	protected $javascriptContainer;

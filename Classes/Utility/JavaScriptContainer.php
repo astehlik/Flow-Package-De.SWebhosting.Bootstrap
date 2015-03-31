@@ -1,5 +1,5 @@
 <?php
-namespace De\SWebhosting\Bootstrap\ViewHelpers\JavaScript;
+namespace De\SWebhosting\Bootstrap\Utility;
 
 /*                                                                        *
  * This script belongs to the TYPO3 Flow package                          *

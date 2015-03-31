@@ -20,7 +20,7 @@ use TYPO3\Flow\Annotations as Flow;
 class AppendViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
 
 	/**
-	 * @var \De\SWebhosting\Bootstrap\ViewHelpers\JavaScript\JavaScriptContainer
+	 * @var \De\SWebhosting\Bootstrap\Utility\JavaScriptContainer
 	 * @Flow\Inject
 	 */
 	protected $javascriptContainer;
