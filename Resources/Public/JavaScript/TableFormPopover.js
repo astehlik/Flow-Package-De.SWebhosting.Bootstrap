@@ -2,53 +2,93 @@
 
 	var formPopover = function() {
 
+		/**
+		 * jQuery reference to the popover trigger container.
+		 *
+		 * @type {object}
+		 */
+		var container;
+
+		/**
+		 * Reference to the popover instance.
+		 *
+		 * @type {object}
+		 */
+		var popover;
+
+		/**
+		 * The settings of the current popover.
+		 *
+		 * @type {object}
+		 */
 		var settings;
 
+		/**
+		 * Returns the content that should be displayed in the popover.
+		 *
+		 * @returns {string}
+		 */
 		var getPopoverContent = function() {
 			return $('.' + settings.classNamePrefix + settings.classNames.popoverContentContainer).html();
 		};
 
-		var toggleDeletePopover = function(tableLine, popover, settings) {
+		/**
+		 * Shows or hides the popover depending on its current state.
+		 */
+		var togglePopover = function() {
 
-			if (tableLine.find('.' + settings.classNamePrefix + 'is-open').length) {
-				closePopover(tableLine, popover);
+			if (container.find('.' + settings.classNamePrefix + 'is-open').length) {
+				closePopover();
 			} else {
-				showDeletePopover(tableLine, popover);
+				showPopover();
 			}
 		};
 
-		var closePopover = function(tableLine, popover) {
+		/**
+		 * Closes the current popover.
+		 */
+		var closePopover = function() {
 
-			tableLine.removeClass(settings.classNames.tableLineHighlight);
+			container.removeClass(settings.classNames.containerHightlightClass);
 
 			popover.popover('hide');
 			popover.removeClass(settings.classNamePrefix + 'is-open');
 		};
 
-		var showDeletePopover = function(tableLine, popover) {
+		/**
+		 * Shows the current popover and updates the form values with the required data.
+		 */
+		var showPopover = function() {
 
 			popover.popover('show');
 			popover.addClass(settings.classNamePrefix + 'is-open');
 
-			var entityId = tableLine.find('.' + settings.classNamePrefix + settings.classNames.identifier).attr(settings.identifierAttribute);
-			tableLine.find('.' + settings.classNamePrefix + settings.classNames.identifierInput).val(entityId);
+			var entityId = container.find('.' + settings.classNamePrefix + settings.classNames.identifier).attr(settings.identifierAttribute);
+			container.find('.' + settings.classNamePrefix + settings.classNames.identifierInput).val(entityId);
 
-			var closeButton = tableLine.find('.' + settings.classNamePrefix + settings.classNames.closeButton);
+			var closeButton = container.find('.' + settings.classNamePrefix + settings.classNames.closeButton);
 			closeButton.click(function(e) {
 				e.preventDefault();
-				closePopover(tableLine, popover)
+				closePopover(container, popover)
 			});
 
-			tableLine.find('.' + settings.classNamePrefix + settings.classNames.submitButton).focus();
+			container.find('.' + settings.classNamePrefix + settings.classNames.submitButton).focus();
 
-			tableLine.addClass(settings.classNames.tableLineHighlight);
+			container.addClass(settings.classNames.containerHightlightClass);
 		};
 
-		this.initialize = function(tableLine, globalSettings) {
+		/**
+		 * Initializes the popover.
+		 *
+		 * @param {object} containerParam
+		 * @param {object} settingsParam
+		 */
+		this.initialize = function(containerParam, settingsParam) {
 
-			settings = globalSettings;
+			container = containerParam;
+			settings = settingsParam;
 
-			var popoverTrigger = tableLine.find('.' + settings.classNamePrefix + settings.classNames.popoverTrigger);
+			var popoverTrigger = container.find('.' + settings.classNamePrefix + settings.classNames.popoverTrigger);
 
 			var popoverSettings = $.extend(
 				{
@@ -58,7 +98,7 @@
 			);
 
 			var originalTitle = popoverTrigger.attr('title');
-			var popover = popoverTrigger.popover(popoverSettings);
+			popover = popoverTrigger.popover(popoverSettings);
 
 			// Somehow the popover kills the title from the title attribute.
 			// This is why we restore it after the popover is initialized.
@@ -66,17 +106,16 @@
 
 			popoverTrigger.click(function(e) {
 				e.preventDefault();
-				toggleDeletePopover(tableLine, popover, settings);
+				togglePopover();
 			});
 		};
 	};
 
-	$.fn.tableFormPopover = function(options) {
+	$.fn.formPopover = function(options) {
 
-		// This is the easiest way to have default options.
 		var settings = {
-			classNamePrefix: 'de-swebhosting-bootstrap-table-popover-',
-			identifierAttribute: 'data-de-swebhosting-bootstrap-table-popover-identifier',
+			classNamePrefix: 'de-swebhosting-bootstrap-form-popover-',
+			identifierAttribute: 'data-de-swebhosting-bootstrap-form-popover-identifier',
 			popover: {
 				html: true,
 				placement: 'left',
@@ -89,7 +128,7 @@
 				popoverContentContainer: 'content',
 				closeButton: 'close',
 				submitButton: 'submit',
-				tableLineHighlight: 'danger'
+				containerHightlightClass: 'danger'
 			}
 		};
 
