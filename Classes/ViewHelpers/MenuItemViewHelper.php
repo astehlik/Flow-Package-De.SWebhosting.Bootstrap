@@ -23,6 +23,13 @@ use TYPO3\Flow\Annotations as Flow;
  * @Flow\Scope("prototype")
  */
 class MenuItemViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper {
+
+	/**
+	 * @Flow\Inject
+	 * @var \De\SWebhosting\Bootstrap\Utility\PointcutUtility
+	 */
+	protected $pointcutUtility;
+
 	/**
 	 * Initialize all arguments. You need to override this method and call
 	 * $this->registerArgument(...) inside this method, to register all your arguments.
@@ -38,16 +45,11 @@ class MenuItemViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedVi
 	 * controller / action is matching.
 	 *
 	 * @param string $activeControllerActionFilter
-	 * @param array $activeControllerActionFilters
 	 * @param string $activeClass
 	 * @param string $tagName
 	 * @return string
 	 */
-	public function render($activeControllerActionFilter = NULL, array $activeControllerActionFilters = array(), $activeClass = 'active', $tagName = 'li') {
-
-		if (isset($activeControllerActionFilter)) {
-			$activeControllerActionFilters[] = $activeControllerActionFilter;
-		}
+	public function render($activeControllerActionFilter = NULL, $activeClass = 'active', $tagName = 'li') {
 
 		$class = '';
 
@@ -55,12 +57,8 @@ class MenuItemViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedVi
 			$class = trim($this->arguments['class']);
 		}
 
-		foreach ($activeControllerActionFilters as $activeControllerActionFilter) {
-
-			if ($this->matchCurrentControllerAction($activeControllerActionFilter)) {
-				$class = ($class !== '') ? $class . ' ' . $activeClass : $activeClass;
-				break;
-			}
+		if ($this->matchCurrentControllerAction($activeControllerActionFilter)) {
+			$class = ($class !== '') ? $class . ' ' . $activeClass : $activeClass;
 		}
 
 		$this->tag->setTagName($tagName);
@@ -68,6 +66,9 @@ class MenuItemViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedVi
 		$this->tag->addAttribute('class', $class);
 		return $this->tag->render();
 	}
+
+
+
 
 	/**
 	 * Checks if the given controller / action name matches the current
@@ -78,32 +79,11 @@ class MenuItemViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedVi
 	 */
 	protected function matchCurrentControllerAction($activeControllerActionFilter) {
 
-		$oneMatch = FALSE;
 		$request = $this->controllerContext->getRequest();
-		list($classPattern, $actionPattern) = \TYPO3\Flow\Utility\Arrays::trimExplode('->', $activeControllerActionFilter);
-
-		$classPattern = (string)$classPattern;
-		$controllerClass = $request->getControllerObjectName();
-		if ($classPattern !== '') {
-			if (preg_match('/' . str_replace('\\', '\\\\', $classPattern) . '/', $controllerClass) === 0) {
-				return FALSE;
-			} else {
-				$oneMatch = TRUE;
-			}
+		if (!$request instanceof \TYPO3\Flow\Mvc\ActionRequest) {
+			throw new \RuntimeException('The MenuItemViewHelper only works in \\TYPO3\\Flow\\Mvc\\ActionRequest context.', 1425850365);
 		}
 
-		if ($request instanceof \TYPO3\Flow\Mvc\ActionRequest) {
-			$actionPattern = (string)$actionPattern;
-			$actionName = $request->getControllerActionName();
-			if ($actionPattern !== '') {
-				if (preg_match('/' . $actionPattern . '/', $actionName) === 0) {
-					return FALSE;
-				} else {
-					$oneMatch = TRUE;
-				}
-			}
-		}
-
-		return $oneMatch;
+		return $this->pointcutUtility->matchControllerActionMethod($activeControllerActionFilter, $request);
 	}
 }
