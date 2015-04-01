@@ -1,7 +1,7 @@
 {
 	"name": "de-swebhosting-flow-package/bootstrap",
 	"type": "typo3-flow-package",
-	"description": "View helpers to ease Bootstrap framework integration and utility view helpers and classes for JS loading and resource handling.",
+	"description": "Makes Bootstrap framework integration easier and provides utility view helpers and classes for JS loading and resource handling.",
 	"license": "GPL-3.0+",
 	"suggest": {
 		"twbs/bootstrap": "The output of the view helpers of this package is optimized for the Bootstrap framework (http://getbootstrap.com/)."
