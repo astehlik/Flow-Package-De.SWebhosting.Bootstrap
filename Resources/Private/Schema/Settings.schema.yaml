@@ -1,3 +1,0 @@
-type: dictionary
-properties:
-  'useUncompressedFiles': {type: boolean, required: TRUE}
