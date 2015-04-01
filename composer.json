@@ -3,9 +3,8 @@
 	"type": "typo3-flow-package",
 	"description": "View helpers to ease Bootstrap framework integration and utility view helpers and classes for JS loading and resource handling.",
 	"license": "GPL-3.0+",
-	"require": {
-		"typo3/twitter-bootstrap": "*",
-		"twbs/bootstrap": "~3.3"
+	"suggest": {
+		"twbs/bootstrap": "The output of the view helpers of this package is optimized for the Bootstrap framework (http://getbootstrap.com/)."
 	},
 	"autoload": {
 		"psr-4": {
