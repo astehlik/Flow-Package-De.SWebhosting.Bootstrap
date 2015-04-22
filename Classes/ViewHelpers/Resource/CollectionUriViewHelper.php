@@ -33,6 +33,11 @@ class CollectionUriViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewH
 	 */
 	public function render($collectionName, $path) {
 		$collection = $this->resourceManager->getCollection($collectionName);
+
+		if (!isset($collection)) {
+			throw new \InvalidArgumentException(sprintf('The collection %s was not found. Please make sure you have configured this collection before using it.', $collectionName), 1428397307);
+		}
+
 		return $collection->getTarget()->getPublicStaticResourceUri($path);
 	}
 }
