@@ -17,11 +17,11 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * Changes the look of the default Fluid pagination widget
  */
-class PaginateViewHelper extends \TYPO3\Fluid\ViewHelpers\Widget\PaginateViewHelper {
-
-	/**
-	 * @Flow\Inject
-	 * @var \De\SWebhosting\Bootstrap\ViewHelpers\Widget\Controller\PaginateController
-	 */
-	protected $controller;
+class PaginateViewHelper extends \TYPO3\Fluid\ViewHelpers\Widget\PaginateViewHelper
+{
+    /**
+     * @Flow\Inject
+     * @var \De\SWebhosting\Bootstrap\ViewHelpers\Widget\Controller\PaginateController
+     */
+    protected $controller;
 }

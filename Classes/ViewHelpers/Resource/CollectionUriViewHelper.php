@@ -18,26 +18,32 @@ use TYPO3\Flow\Resource\ResourceManager;
 /**
  * Renders a public resource URI for a given file in a given collection.
  */
-class CollectionUriViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
+class CollectionUriViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper
+{
+    /**
+     * @Flow\Inject
+     * @var ResourceManager
+     */
+    protected $resourceManager;
 
-	/**
-	 * @Flow\Inject
-	 * @var ResourceManager
-	 */
-	protected $resourceManager;
+    /**
+     * @param string $collectionName The name of the collection for which the URI should be rendered.
+     * @param string $path The path to the file within the collection for which the URI should be rendered.
+     * @return string
+     */
+    public function render($collectionName, $path)
+    {
+        $collection = $this->resourceManager->getCollection($collectionName);
 
-	/**
-	 * @param string $collectionName The name of the collection for which the URI should be rendered.
-	 * @param string $path The path to the file within the collection for which the URI should be rendered.
-	 * @return string
-	 */
-	public function render($collectionName, $path) {
-		$collection = $this->resourceManager->getCollection($collectionName);
+        if (!isset($collection)) {
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'The collection %s was not found. Please make sure you have configured this collection before using it.',
+                    $collectionName
+                ), 1428397307
+            );
+        }
 
-		if (!isset($collection)) {
-			throw new \InvalidArgumentException(sprintf('The collection %s was not found. Please make sure you have configured this collection before using it.', $collectionName), 1428397307);
-		}
-
-		return $collection->getTarget()->getPublicStaticResourceUri($path);
-	}
+        return $collection->getTarget()->getPublicStaticResourceUri($path);
+    }
 }

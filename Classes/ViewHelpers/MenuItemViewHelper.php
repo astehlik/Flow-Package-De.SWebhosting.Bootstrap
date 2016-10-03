@@ -22,68 +22,69 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("prototype")
  */
-class MenuItemViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper {
+class MenuItemViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper
+{
+    /**
+     * @Flow\Inject
+     * @var \De\SWebhosting\Bootstrap\Utility\PointcutUtility
+     */
+    protected $pointcutUtility;
 
-	/**
-	 * @Flow\Inject
-	 * @var \De\SWebhosting\Bootstrap\Utility\PointcutUtility
-	 */
-	protected $pointcutUtility;
+    /**
+     * Initialize all arguments. You need to override this method and call
+     * $this->registerArgument(...) inside this method, to register all your arguments.
+     *
+     * @return void
+     */
+    public function initializeArguments()
+    {
+        $this->registerUniversalTagAttributes();
+    }
 
-	/**
-	 * Initialize all arguments. You need to override this method and call
-	 * $this->registerArgument(...) inside this method, to register all your arguments.
-	 *
-	 * @return void
-	 */
-	public function initializeArguments() {
-		$this->registerUniversalTagAttributes();
-	}
+    /**
+     * Renders the HTML element and adds an additional active class if
+     * controller / action is matching.
+     *
+     * @param string $activeControllerActionFilter
+     * @param string $activeClass
+     * @param string $tagName
+     * @return string
+     */
+    public function render($activeControllerActionFilter = null, $activeClass = 'active', $tagName = 'li')
+    {
+        $class = '';
 
-	/**
-	 * Renders the HTML element and adds an additional active class if
-	 * controller / action is matching.
-	 *
-	 * @param string $activeControllerActionFilter
-	 * @param string $activeClass
-	 * @param string $tagName
-	 * @return string
-	 */
-	public function render($activeControllerActionFilter = NULL, $activeClass = 'active', $tagName = 'li') {
+        if ($this->hasArgument('class') && $this->arguments['class'] !== '') {
+            $class = trim($this->arguments['class']);
+        }
 
-		$class = '';
+        if ($this->matchCurrentControllerAction($activeControllerActionFilter)) {
+            $class = ($class !== '') ? $class . ' ' . $activeClass : $activeClass;
+        }
 
-		if ($this->hasArgument('class') && $this->arguments['class'] !== '') {
-			$class = trim($this->arguments['class']);
-		}
-
-		if ($this->matchCurrentControllerAction($activeControllerActionFilter)) {
-			$class = ($class !== '') ? $class . ' ' . $activeClass : $activeClass;
-		}
-
-		$this->tag->setTagName($tagName);
-		$this->tag->setContent($this->renderChildren());
-		$this->tag->addAttribute('class', $class);
-		return $this->tag->render();
-	}
+        $this->tag->setTagName($tagName);
+        $this->tag->setContent($this->renderChildren());
+        $this->tag->addAttribute('class', $class);
+        return $this->tag->render();
+    }
 
 
+    /**
+     * Checks if the given controller / action name matches the current
+     * controller / action.
+     *
+     * @param string $activeControllerActionFilter
+     * @return bool
+     */
+    protected function matchCurrentControllerAction($activeControllerActionFilter)
+    {
+        $request = $this->controllerContext->getRequest();
+        if (!$request instanceof \TYPO3\Flow\Mvc\ActionRequest) {
+            throw new \RuntimeException(
+                'The MenuItemViewHelper only works in \\TYPO3\\Flow\\Mvc\\ActionRequest context.', 1425850365
+            );
+        }
 
-
-	/**
-	 * Checks if the given controller / action name matches the current
-	 * controller / action.
-	 *
-	 * @param string $activeControllerActionFilter
-	 * @return bool
-	 */
-	protected function matchCurrentControllerAction($activeControllerActionFilter) {
-
-		$request = $this->controllerContext->getRequest();
-		if (!$request instanceof \TYPO3\Flow\Mvc\ActionRequest) {
-			throw new \RuntimeException('The MenuItemViewHelper only works in \\TYPO3\\Flow\\Mvc\\ActionRequest context.', 1425850365);
-		}
-
-		return $this->pointcutUtility->matchControllerActionMethod($activeControllerActionFilter, $request);
-	}
+        return $this->pointcutUtility->matchControllerActionMethod($activeControllerActionFilter, $request);
+    }
 }

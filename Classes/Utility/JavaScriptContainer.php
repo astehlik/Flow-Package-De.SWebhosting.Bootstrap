@@ -17,21 +17,21 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * @Flow\Scope("singleton")
  */
-class JavaScriptContainer {
-
+class JavaScriptContainer
+{
 	/**
 	 * Contains all loaded ids
 	 *
 	 * @var array
 	 */
-	protected $loadedIds = array();
+	protected $loadedIds = [];
 
 	/**
 	 * Stores the JavaScript code for the different sections
 	 *
 	 * @var array
 	 */
-	protected $sections = array();
+	protected $sections = [];
 
 	/**
 	 * Appends the given javascript code to the given section and marks the
@@ -41,7 +41,8 @@ class JavaScriptContainer {
 	 * @param string $id An optional ID that will be marked as loaded
 	 * @param string $section The section to which the src is appended to (footer by default)
 	 */
-	public function appendScriptToSection($script, $id = NULL, $section = 'footer') {
+	public function appendScriptToSection($script, $id = null, $section = 'footer')
+	{
 		$this->appendToSection($script, $id, $section);
 	}
 
@@ -53,7 +54,8 @@ class JavaScriptContainer {
 	 * @param string $id An optional ID that will be marked as loaded
 	 * @param string $section The section to which the src is appended to (footer by default)
 	 */
-	public function appendSrcToSection($src, $id = NULL, $section = 'footer') {
+	public function appendSrcToSection($src, $id = null, $section = 'footer')
+	{
 		$this->appendToSection('<script type="text/javascript" src="' . $src . '"></script>', $id, $section);
 	}
 
@@ -65,8 +67,8 @@ class JavaScriptContainer {
 	 * @return string The content of the given section
 	 * @throws \Exception If no content was present in the section and the section is not optional
 	 */
-	public function getSectionContent($section = 'footer', $optional = TRUE) {
-
+	public function getSectionContent($section = 'footer', $optional = true)
+	{
 		if (array_key_exists($section, $this->sections)) {
 			return $this->sections[$section];
 		} else {
@@ -85,16 +87,16 @@ class JavaScriptContainer {
 	 * @param string $id
 	 * @return bool
 	 */
-	public function idIsLoaded($id) {
-
+	public function idIsLoaded($id)
+	{
 		if (!isset($id)) {
-			return FALSE;
+			return false;
 		}
 
 		if (array_key_exists($id, $this->loadedIds)) {
-			return TRUE;
+			return true;
 		} else {
-			return FALSE;
+			return false;
 		}
 	}
 
@@ -107,10 +109,12 @@ class JavaScriptContainer {
 	 * @param string $section The section to which the script is appended
 	 * @throws \Exception If there was already script loaded for the given id
 	 */
-	protected function appendToSection($script, $id, $section) {
-
+	protected function appendToSection($script, $id, $section)
+	{
 		if ($this->idIsLoaded($id)) {
-			throw new \Exception("You are trying to set the content for an id that was already loaded. Please use idIsLoaded() to check if the id was loaded before.");
+			throw new \Exception(
+				"You are trying to set the content for an id that was already loaded. Please use idIsLoaded() to check if the id was loaded before."
+			);
 		}
 
 		if (!array_key_exists($section, $this->sections)) {
@@ -127,12 +131,12 @@ class JavaScriptContainer {
 	 *
 	 * @param string $id
 	 */
-	protected function markIdAsLoaded($id) {
-
+	protected function markIdAsLoaded($id)
+	{
 		if (!isset($id)) {
 			return;
 		}
 
-		$this->loadedIds[$id] = TRUE;
+		$this->loadedIds[$id] = true;
 	}
 }

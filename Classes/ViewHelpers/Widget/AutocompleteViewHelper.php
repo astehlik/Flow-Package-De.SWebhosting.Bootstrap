@@ -20,33 +20,56 @@ use TYPO3\Fluid\Core\Widget\AbstractWidgetViewHelper;
  * <f:input id="name" ... />
  * <f:widget.autocomplete for="name" objects="{posts}" searchProperty="author">
  */
-class AutocompleteViewHelper extends AbstractWidgetViewHelper {
+class AutocompleteViewHelper extends AbstractWidgetViewHelper
+{
+    /**
+     * @var boolean
+     */
+    protected $ajaxWidget = true;
 
-	/**
-	 * @var boolean
-	 */
-	protected $ajaxWidget = TRUE;
+    /**
+     * @Flow\Inject
+     * @var \De\SWebhosting\Bootstrap\ViewHelpers\Widget\Controller\AutocompleteController
+     */
+    protected $controller;
 
-	/**
-	 * @Flow\Inject
-	 * @var \De\SWebhosting\Bootstrap\ViewHelpers\Widget\Controller\AutocompleteController
-	 */
-	protected $controller;
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument(
+            'objects',
+            'QueryResultInterface',
+            'Query result which will be used to search for autocomplete items.',
+            true
+        );
+        $this->registerArgument(
+            'searchProperty',
+            'string',
+            'The value the user types in will be search in this property.',
+            true
+        );
+        $this->registerArgument(
+            'id',
+            'string',
+            'The id of the container which will contain the autocomplete data.',
+            true
+        );
+        $this->registerArgument(
+            'maxItems',
+            'integer',
+            'The maximum number of items returned for display in the autocomplete widget.',
+            false,
+            10
+        );
+    }
 
-	public function initializeArguments() {
-		parent::initializeArguments();
-		$this->registerArgument('objects', 'QueryResultInterface', 'Query result which will be used to search for autocomplete items.', TRUE);
-		$this->registerArgument('searchProperty', 'string', 'The value the user types in will be search in this property.', TRUE);
-		$this->registerArgument('id', 'string', 'The id of the container which will contain the autocomplete data.', TRUE);
-		$this->registerArgument('maxItems', 'integer', 'The maximum number of items returned for display in the autocomplete widget.', FALSE, 10);
-	}
-
-	/**
-	 * Renders a container with information for the autocomplete widget.
-	 *
-	 * @return string
-	 */
-	public function render() {
-		return $this->initiateSubRequest();
-	}
+    /**
+     * Renders a container with information for the autocomplete widget.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        return $this->initiateSubRequest();
+    }
 }

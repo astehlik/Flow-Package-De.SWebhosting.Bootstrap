@@ -17,30 +17,34 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * Appends JavaScript code to a section.
  */
-class AppendViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
+class AppendViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper
+{
+    /**
+     * @var \De\SWebhosting\Bootstrap\Utility\JavaScriptContainer
+     * @Flow\Inject
+     */
+    protected $javascriptContainer;
 
-	/**
-	 * @var \De\SWebhosting\Bootstrap\Utility\JavaScriptContainer
-	 * @Flow\Inject
-	 */
-	protected $javascriptContainer;
-
-	/**
-	 * Appends JavaScript code to a section.
-	 *
-	 * @param string $script
-	 * @param string $src
-	 * @param string $section
-	 * @throws \TYPO3\Flow\Mvc\Exception\RequiredArgumentMissingException
-	 */
-	public function render($script = NULL, $src = NULL, $section = 'footer') {
-
-		if (isset($script)) {
-			$this->javascriptContainer->appendScriptToSection($script, NULL, $section);
-		} else if (isset($src)) {
-			$this->javascriptContainer->appendSrcToSection($src, NULL, $section);
-		} else {
-			throw new \TYPO3\Flow\Mvc\Exception\RequiredArgumentMissingException('Either "src" or "script" is required as an argument for this view helper.');
-		}
-	}
+    /**
+     * Appends JavaScript code to a section.
+     *
+     * @param string $script
+     * @param string $src
+     * @param string $section
+     * @throws \TYPO3\Flow\Mvc\Exception\RequiredArgumentMissingException
+     */
+    public function render($script = null, $src = null, $section = 'footer')
+    {
+        if (isset($script)) {
+            $this->javascriptContainer->appendScriptToSection($script, null, $section);
+        } else {
+            if (isset($src)) {
+                $this->javascriptContainer->appendSrcToSection($src, null, $section);
+            } else {
+                throw new \TYPO3\Flow\Mvc\Exception\RequiredArgumentMissingException(
+                    'Either "src" or "script" is required as an argument for this view helper.'
+                );
+            }
+        }
+    }
 }

@@ -18,22 +18,23 @@ use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
  * This view helper removes the whitespace between all HTML tags
  * that are rendered in its children.
  */
-class TrimWhiteSpaceBetweenHtmlViewHelper extends AbstractViewHelper {
+class TrimWhiteSpaceBetweenHtmlViewHelper extends AbstractViewHelper
+{
+    /**
+     * We render HTML code and to not want it to be escaped.
+     *
+     * @var bool
+     */
+    protected $escapeOutput = false;
 
-	/**
-	 * We render HTML code and to not want it to be escaped.
-	 *
-	 * @var bool
-	 */
-	protected $escapeOutput = FALSE;
-
-	/**
-	 * Removes whitespace in the rendered child HTML using a regular expression.
-	 *
-	 * @return string
-	 */
-	public function render() {
-		$result = $this->renderChildren();
-		return preg_replace('~>\s+<~', '><', $result);
-	}
+    /**
+     * Removes whitespace in the rendered child HTML using a regular expression.
+     *
+     * @return string
+     */
+    public function render()
+    {
+        $result = $this->renderChildren();
+        return preg_replace('~>\s+<~', '><', $result);
+    }
 }

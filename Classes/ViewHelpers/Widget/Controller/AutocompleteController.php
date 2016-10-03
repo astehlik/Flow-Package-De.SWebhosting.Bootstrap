@@ -20,62 +20,66 @@ use TYPO3\Fluid\Core\Widget\AbstractWidgetController;
 /**
  * Controller for the auto-complete widget
  */
-class AutocompleteController extends AbstractWidgetController {
+class AutocompleteController extends AbstractWidgetController
+{
+    /**
+     * @Flow\Inject
+     * @var \TYPO3\Flow\Persistence\PersistenceManagerInterface
+     */
+    protected $persistenceManager;
 
-	/**
-	 * @Flow\Inject
-	 * @var \TYPO3\Flow\Persistence\PersistenceManagerInterface
-	 */
-	protected $persistenceManager;
+    /**
+     * @param string $term
+     * @return string
+     */
+    public function autocompleteAction($term)
+    {
+        $searchProperty = $this->widgetConfiguration['searchProperty'];
+        /** @var $queryResult QueryResultInterface */
+        $queryResult = $this->widgetConfiguration['objects'];
+        $query = clone $queryResult->getQuery();
+        $constraint = $query->getConstraint();
 
-	/**
-	 * @param string $term
-	 * @return string
-	 */
-	public function autocompleteAction($term) {
-		$searchProperty = $this->widgetConfiguration['searchProperty'];
-		/** @var $queryResult QueryResultInterface */
-		$queryResult = $this->widgetConfiguration['objects'];
-		$query = clone $queryResult->getQuery();
-		$constraint = $query->getConstraint();
+        if ($constraint !== null) {
+            $query->matching(
+                $query->logicalAnd(
+                    $constraint,
+                    $query->like($searchProperty, '%' . $term . '%', false)
+                )
+            );
+        } else {
+            $query->matching(
+                $query->like($searchProperty, '%' . $term . '%', false)
+            );
+        }
+        if (isset($this->widgetConfiguration['maxItems'])) {
+            $query->setLimit((integer)$this->widgetConfiguration['maxItems']);
+        }
 
-		if ($constraint !== NULL) {
-			$query->matching($query->logicalAnd(
-				$constraint,
-				$query->like($searchProperty, '%' . $term . '%', FALSE)
-			));
-		} else {
-			$query->matching(
-				$query->like($searchProperty, '%' . $term . '%', FALSE)
-			);
-		}
-		if (isset($this->widgetConfiguration['maxItems'])) {
-			$query->setLimit((integer)$this->widgetConfiguration['maxItems']);
-		}
+        $results = $query->execute();
 
-		$results = $query->execute();
+        $output = [];
+        $values = [];
+        foreach ($results as $singleResult) {
+            $val = ObjectAccess::getPropertyPath($singleResult, $searchProperty);
+            if (isset($values[$val])) {
+                continue;
+            }
+            $values[$val] = true;
+            $output[] = [
+                'id' => $this->persistenceManager->getIdentifierByObject($singleResult),
+                'label' => $val,
+                'value' => $val
+            ];
+        }
+        return json_encode($output);
+    }
 
-		$output = array();
-		$values = array();
-		foreach ($results as $singleResult) {
-			$val = ObjectAccess::getPropertyPath($singleResult, $searchProperty);
-			if (isset($values[$val])) {
-				continue;
-			}
-			$values[$val] = TRUE;
-			$output[] = array(
-				'id' => $this->persistenceManager->getIdentifierByObject($singleResult),
-				'label' => $val,
-				'value' => $val
-			);
-		}
-		return json_encode($output);
-	}
-
-	/**
-	 * @return void
-	 */
-	public function indexAction() {
-		$this->view->assign('id', $this->widgetConfiguration['id']);
-	}
+    /**
+     * @return void
+     */
+    public function indexAction()
+    {
+        $this->view->assign('id', $this->widgetConfiguration['id']);
+    }
 }

@@ -17,28 +17,29 @@ use TYPO3\Flow\Annotations as Flow;
 /**
  * Renders JavaScript code that was registered for the given section.
  */
-class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper {
+class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper
+{
+    /**
+     * We render HTML code and to not want it to be escaped.
+     *
+     * @var bool
+     */
+    protected $escapeOutput = false;
 
-	/**
-	 * We render HTML code and to not want it to be escaped.
-	 *
-	 * @var bool
-	 */
-	protected $escapeOutput = FALSE;
+    /**
+     * @var \De\SWebhosting\Bootstrap\Utility\JavaScriptContainer
+     * @Flow\Inject
+     */
+    protected $javascriptContainer;
 
-	/**
-	 * @var \De\SWebhosting\Bootstrap\Utility\JavaScriptContainer
-	 * @Flow\Inject
-	 */
-	protected $javascriptContainer;
-
-	/**
-	 * Renders JavaScript code that was registered for the given section.
-	 *
-	 * @param string $section
-	 * @return string
-	 */
-	public function render($section = 'footer') {
-		return $this->javascriptContainer->getSectionContent($section);
-	}
+    /**
+     * Renders JavaScript code that was registered for the given section.
+     *
+     * @param string $section
+     * @return string
+     */
+    public function render($section = 'footer')
+    {
+        return $this->javascriptContainer->getSectionContent($section);
+    }
 }
