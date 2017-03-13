@@ -79,7 +79,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
     /**
      * Builds the translated error messages for the given parameters.
      *
-     * @param \Neos\Flow\Error\Result $validationResult
+     * @param \Neos\Error\Messages\Result $validationResult
      * @param string $forProperty
      * @param string $originalProperty
      * @param boolean $includeChildProperties
@@ -130,7 +130,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
             return $errorMessages;
         }
 
-        /** @var \Neos\Flow\Error\Message $message */
+        /** @var \Neos\Error\Messages\Message $message */
         foreach ($messages as $message) {
             $controllerId = $controllerPrefix . $message->getCode();
             $translatedMessage = $this->translateById($controllerId);
@@ -172,7 +172,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
             $this->arguments['validationResultsVariableName']
         );
 
-        /** @var \Neos\Flow\Error\Result $validationResult */
+        /** @var \Neos\Error\Messages\Result $validationResult */
         $validationResult = $validationResultData['validationResults'];
         if (!isset($validationResult)) {
             return $errorMessages;
@@ -200,7 +200,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
      * Flattens the given array of property messages.
      *
      * @param array $propertyMessages
-     * @return \Neos\Flow\Error\Message[]
+     * @return \Neos\Error\Messages\Message[]
      */
     protected function getFattenedMessages($propertyMessages)
     {

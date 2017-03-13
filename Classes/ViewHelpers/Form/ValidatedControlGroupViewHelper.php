@@ -93,7 +93,7 @@ class ValidatedControlGroupViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper
 
         /** @var $request \Neos\Flow\Mvc\ActionRequest */
         $request = $this->controllerContext->getRequest();
-        /** @var $validationResults \Neos\Flow\Error\Result */
+        /** @var $validationResults \Neos\Error\Messages\Result */
         $validationResults = $request->getInternalArgument('__submittedArgumentValidationResults');
         if ($validationResults !== null && $for !== '') {
             $validationResults = $validationResults->forProperty($for);

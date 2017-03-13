@@ -14,7 +14,7 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Widget\Controller;
 
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Persistence\QueryResultInterface;
-use Neos\Flow\Reflection\ObjectAccess;
+use Neos\Utility\ObjectAccess;
 use Neos\FluidAdaptor\Core\Widget\AbstractWidgetController;
 
 /**
