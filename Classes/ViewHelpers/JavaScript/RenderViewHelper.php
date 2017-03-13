@@ -12,12 +12,12 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\JavaScript;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Renders JavaScript code that was registered for the given section.
  */
-class RenderViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper
+class RenderViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper
 {
     /**
      * We render HTML code and to not want it to be escaped.

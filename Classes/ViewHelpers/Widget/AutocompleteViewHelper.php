@@ -12,8 +12,8 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Widget;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Fluid\Core\Widget\AbstractWidgetViewHelper;
+use Neos\Flow\Annotations as Flow;
+use Neos\FluidAdaptor\Core\Widget\AbstractWidgetViewHelper;
 
 /**
  * Usage:

@@ -12,12 +12,12 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\JavaScript;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Appends JavaScript code to a section.
  */
-class AppendViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper
+class AppendViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper
 {
     /**
      * @var \De\SWebhosting\Bootstrap\Utility\JavaScriptContainer
@@ -31,7 +31,7 @@ class AppendViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper
      * @param string $script
      * @param string $src
      * @param string $section
-     * @throws \TYPO3\Flow\Mvc\Exception\RequiredArgumentMissingException
+     * @throws \Neos\Flow\Mvc\Exception\RequiredArgumentMissingException
      */
     public function render($script = null, $src = null, $section = 'footer')
     {
@@ -41,7 +41,7 @@ class AppendViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper
             if (isset($src)) {
                 $this->javascriptContainer->appendSrcToSection($src, null, $section);
             } else {
-                throw new \TYPO3\Flow\Mvc\Exception\RequiredArgumentMissingException(
+                throw new \Neos\Flow\Mvc\Exception\RequiredArgumentMissingException(
                     'Either "src" or "script" is required as an argument for this view helper.'
                 );
             }

@@ -12,10 +12,10 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Widget\Controller;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Persistence\QueryResultInterface;
-use TYPO3\Flow\Reflection\ObjectAccess;
-use TYPO3\Fluid\Core\Widget\AbstractWidgetController;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Persistence\QueryResultInterface;
+use Neos\Flow\Reflection\ObjectAccess;
+use Neos\FluidAdaptor\Core\Widget\AbstractWidgetController;
 
 /**
  * Controller for the auto-complete widget
@@ -24,7 +24,7 @@ class AutocompleteController extends AbstractWidgetController
 {
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\Persistence\PersistenceManagerInterface
+     * @var \Neos\Flow\Persistence\PersistenceManagerInterface
      */
     protected $persistenceManager;
 

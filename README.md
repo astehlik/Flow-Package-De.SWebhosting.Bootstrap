@@ -55,7 +55,7 @@ in different places (e.g. header and footer).
 
 This package provides the ```\De\SWebhosting\Bootstrap\Resource\ReadOnlyDirectoryStorage```.
 This storage can be used to publish any local directory together with
-the ```\TYPO3\Flow\Resource\Target\FileSystemSymlinkTarget```.
+the ```\Neos\Flow\Resource\Target\FileSystemSymlinkTarget```.
 
 Create your custom collection to publish a Frontend library that you have loaded
 with composer and use the ```resource.collectionUri`` view helper to retrieve

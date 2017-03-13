@@ -12,7 +12,7 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * This view helper renders a configurable HTML tag and if the current
@@ -22,7 +22,7 @@ use TYPO3\Flow\Annotations as Flow;
  *
  * @Flow\Scope("prototype")
  */
-class MenuItemViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper
+class MenuItemViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper\AbstractTagBasedViewHelper
 {
     /**
      * @Flow\Inject
@@ -79,7 +79,7 @@ class MenuItemViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractTagBasedVi
     protected function matchCurrentControllerAction($activeControllerActionFilter)
     {
         $request = $this->controllerContext->getRequest();
-        if (!$request instanceof \TYPO3\Flow\Mvc\ActionRequest) {
+        if (!$request instanceof \Neos\Flow\Mvc\ActionRequest) {
             throw new \RuntimeException(
                 'The MenuItemViewHelper only works in \\TYPO3\\Flow\\Mvc\\ActionRequest context.', 1425850365
             );

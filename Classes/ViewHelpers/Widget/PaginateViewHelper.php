@@ -12,12 +12,12 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Widget;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Changes the look of the default Fluid pagination widget
  */
-class PaginateViewHelper extends \TYPO3\Fluid\ViewHelpers\Widget\PaginateViewHelper
+class PaginateViewHelper extends \Neos\FluidAdaptor\ViewHelpers\Widget\PaginateViewHelper
 {
     /**
      * @Flow\Inject

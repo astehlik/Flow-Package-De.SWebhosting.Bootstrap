@@ -12,8 +12,8 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use Neos\Flow\Annotations as Flow;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Displays validation errors as inline helptext.
@@ -29,13 +29,13 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
 
     /**
      * @Flow\Inject
-     * @var \TYPO3\Fluid\Core\Parser\TemplateParser
+     * @var \Neos\FluidAdaptor\Core\Parser\TemplateParser
      */
     protected $templateParser;
 
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\I18n\Translator
+     * @var \Neos\Flow\I18n\Translator
      */
     protected $translator;
 
@@ -79,7 +79,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
     /**
      * Builds the translated error messages for the given parameters.
      *
-     * @param \TYPO3\Flow\Error\Result $validationResult
+     * @param \Neos\Flow\Error\Result $validationResult
      * @param string $forProperty
      * @param string $originalProperty
      * @param boolean $includeChildProperties
@@ -89,7 +89,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
     {
         $errorMessages = [];
 
-        /** @var \TYPO3\Flow\Mvc\ActionRequest $request */
+        /** @var \Neos\Flow\Mvc\ActionRequest $request */
         $request = $this->controllerContext->getRequest();
 
         $for = $originalProperty;
@@ -130,7 +130,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
             return $errorMessages;
         }
 
-        /** @var \TYPO3\Flow\Error\Message $message */
+        /** @var \Neos\Flow\Error\Message $message */
         foreach ($messages as $message) {
             $controllerId = $controllerPrefix . $message->getCode();
             $translatedMessage = $this->translateById($controllerId);
@@ -158,7 +158,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
      * Renders all error messages to a string seperated by line breaks.
      *
      * @return string
-     * @throws \TYPO3\Fluid\Core\ViewHelper\Exception\InvalidVariableException
+     * @throws \Neos\FluidAdaptor\Core\ViewHelper\Exception\InvalidVariableException
      */
     protected function getErrorMessages()
     {
@@ -172,7 +172,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
             $this->arguments['validationResultsVariableName']
         );
 
-        /** @var \TYPO3\Flow\Error\Result $validationResult */
+        /** @var \Neos\Flow\Error\Result $validationResult */
         $validationResult = $validationResultData['validationResults'];
         if (!isset($validationResult)) {
             return $errorMessages;
@@ -200,7 +200,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
      * Flattens the given array of property messages.
      *
      * @param array $propertyMessages
-     * @return \TYPO3\Flow\Error\Message[]
+     * @return \Neos\Flow\Error\Message[]
      */
     protected function getFattenedMessages($propertyMessages)
     {
@@ -219,7 +219,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
      */
     protected function translateById($id)
     {
-        /** @var \TYPO3\Flow\Mvc\ActionRequest $request */
+        /** @var \Neos\Flow\Mvc\ActionRequest $request */
         $request = $this->controllerContext->getRequest();
         return $this->translator->translateById($id, [], null, null, 'Main', $request->getControllerPackageKey());
     }

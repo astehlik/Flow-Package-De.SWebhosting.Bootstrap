@@ -12,17 +12,16 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Resource;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Resource\ResourceManager;
+use Neos\Flow\Annotations as Flow;
 
 /**
  * Renders a public resource URI for a given file in a given collection.
  */
-class CollectionUriViewHelper extends \TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper
+class CollectionUriViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper
 {
     /**
      * @Flow\Inject
-     * @var ResourceManager
+     * @var \Neos\Flow\ResourceManagement\ResourceManager
      */
     protected $resourceManager;
 

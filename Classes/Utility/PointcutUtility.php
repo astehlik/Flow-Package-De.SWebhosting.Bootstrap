@@ -12,8 +12,8 @@ namespace De\SWebhosting\Bootstrap\Utility;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\Flow\Annotations as Flow;
-use TYPO3\Flow\Mvc\ActionRequest;
+use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Mvc\ActionRequest;
 
 /**
  * Utility class for pointcut handling.
@@ -22,13 +22,13 @@ class PointcutUtility
 {
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\Object\ObjectManagerInterface
+     * @var \Neos\Flow\ObjectManagement\ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
      * @Flow\Inject
-     * @var \TYPO3\Flow\Aop\Pointcut\PointcutExpressionParser
+     * @var \Neos\Flow\Aop\Pointcut\PointcutExpressionParser
      */
     protected $pointcutExpressionParser;
 
@@ -41,13 +41,13 @@ class PointcutUtility
 
     /**
      * @Flow\Inject(lazy=false)
-     * @var \TYPO3\Flow\Aop\Builder\ProxyClassBuilder
+     * @var \Neos\Flow\Aop\Builder\ProxyClassBuilder
      */
     protected $proxyClassBuilder;
 
     /**
      * @Flow\Inject(lazy=false)
-     * @var \TYPO3\Flow\Reflection\ReflectionService
+     * @var \Neos\Flow\Reflection\ReflectionService
      */
     protected $reflectionService;
 

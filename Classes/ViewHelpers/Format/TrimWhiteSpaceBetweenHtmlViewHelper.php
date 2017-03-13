@@ -12,7 +12,7 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Format;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use TYPO3\Fluid\Core\ViewHelper\AbstractViewHelper;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * This view helper removes the whitespace between all HTML tags

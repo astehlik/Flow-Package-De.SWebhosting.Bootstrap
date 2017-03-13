@@ -1,6 +1,6 @@
 <?php
 namespace De\SWebhosting\Bootstrap\ViewHelpers\Widget\Controller;
 
-class PaginateController extends \TYPO3\Fluid\ViewHelpers\Widget\Controller\PaginateController
+class PaginateController extends \Neos\FluidAdaptor\ViewHelpers\Widget\Controller\PaginateController
 {
 }
