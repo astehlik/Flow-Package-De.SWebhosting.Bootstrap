@@ -1,4 +1,5 @@
 <?php
+
 namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
 
 /*                                                                        *
@@ -13,6 +14,7 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
  *                                                                        */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\FluidAdaptor\Core\Parser\TemplateParser;
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -26,12 +28,6 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
      * @var bool
      */
     protected $escapeOutput = false;
-
-    /**
-     * @Flow\Inject
-     * @var \Neos\FluidAdaptor\Core\Parser\TemplateParser
-     */
-    protected $templateParser;
 
     /**
      * @Flow\Inject
@@ -54,7 +50,6 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
         $this->registerArgument('includeChildProperties', 'array', '');
         $this->registerArgument('excludeForPartsFromTranslationKey', 'array', '');
     }
-
 
     /**
      * Displays validation errors as inline helptext.
@@ -83,7 +78,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
      * @param string $forProperty
      * @param string $originalProperty
      * @param boolean $includeChildProperties
-     * @return string
+     * @return array
      */
     protected function buildErrorMessages($validationResult, $forProperty, $originalProperty, $includeChildProperties)
     {
@@ -130,6 +125,8 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
             return $errorMessages;
         }
 
+        $templateParser = $this->getTemplateParser();
+
         /** @var \Neos\Error\Messages\Message $message */
         foreach ($messages as $message) {
             $controllerId = $controllerPrefix . $message->getCode();
@@ -145,7 +142,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
                     }
                 }
             }
-            $translatedMessage = $this->templateParser->parse($translatedMessage);
+            $translatedMessage = $templateParser->parse($translatedMessage);
             $this->templateVariableContainer->add('message', $message);
             $errorMessages[] = $translatedMessage->getRootNode()->evaluate($this->renderingContext);
             $this->templateVariableContainer->remove('message');
@@ -232,5 +229,12 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
         /** @var \Neos\Flow\Mvc\ActionRequest $request */
         $request = $this->controllerContext->getRequest();
         return $this->translator->translateById($id, [], null, null, 'Main', $request->getControllerPackageKey());
+    }
+
+    private function getTemplateParser(): TemplateParser
+    {
+        $templateParser = $this->objectManager->get(TemplateParser::class);
+        $templateParser->setRenderingContext($this->renderingContext);
+        return $templateParser;
     }
 }
