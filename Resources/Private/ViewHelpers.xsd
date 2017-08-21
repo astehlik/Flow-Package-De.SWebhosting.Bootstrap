@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://typo3.org/ns/De/SWebhosting/Bootstrap/ViewHelpers">
+    <xsd:element name="form.inlineHelpOrErrors">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[Displays validation errors as inline helptext.]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute type="xsd:string" name="validationResultsVariableName">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="translationPrefix">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="additionalPropertyPrefix">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="flattenMessages">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="forProperties">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="includeChildProperties">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="excludeForPartsFromTranslationKey">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="form.validatedControlGroup">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[Displays a tag with different classes depending on the validation state.]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute type="xsd:string" name="additionalAttributes">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Additional tag attributes. They will be added directly to the resulting HTML tag.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="data">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Additional data-* attributes. They will each be added with a "data-" prefix.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="class">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[CSS class(es) for this element]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="dir">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Text direction for this HTML element. Allowed strings: "ltr" (left to right), "rtl" (right to left)]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="id">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Unique (in this file) identifier for this HTML element.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="lang">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Language for this element. Use short names specified in RFC 1766]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="style">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[Individual CSS styles for this element]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="title">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[Tooltip text of element]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="accesskey">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[Keyboard shortcut to access this element]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="tabindex">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[Specifies the tab order of this element]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="onclick">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[JavaScript evaluated for the onclick event]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="for">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The name of the property for which the validation results should be checked.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="as">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The variable name in which the validation results should be stored.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="defaultClass">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[This class will always be added to the list of classes for the tag unless it is empty.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="errorClass">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The class that should be added when validation errors are found.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="warningClass">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The class that should be added when validation warnings are found.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="noticeClass">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The class that should be added when validation notices are found.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="tagName">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The tag name that should be used. Defaults to "div".]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="format.trimWhiteSpaceBetweenHtml">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[This view helper removes the whitespace between all HTML tags
+that are rendered in its children.]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="javaScript.append">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[Appends JavaScript code to a section.]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute type="xsd:string" name="script">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="src">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="section">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="javaScript.render">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[Renders JavaScript code that was registered for the given section.]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute type="xsd:string" name="section">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="menuItem">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[This view helper renders a configurable HTML tag and if the current
+controller / action matches the configured active controller / action
+the configured active class will be added to the class property of
+the HTML element.]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute type="xsd:string" name="additionalAttributes">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Additional tag attributes. They will be added directly to the resulting HTML tag.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="data">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Additional data-* attributes. They will each be added with a "data-" prefix.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="activeControllerActionFilter">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="activeClass">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="tagName">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="class">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[CSS class(es) for this element]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="dir">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Text direction for this HTML element. Allowed strings: "ltr" (left to right), "rtl" (right to left)]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="id">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Unique (in this file) identifier for this HTML element.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="lang">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Language for this element. Use short names specified in RFC 1766]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="style">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[Individual CSS styles for this element]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="title">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[Tooltip text of element]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="accesskey">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[Keyboard shortcut to access this element]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="tabindex">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[Specifies the tab order of this element]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="onclick">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[JavaScript evaluated for the onclick event]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="resource.collectionUri">
+        <xsd:annotation>
+            <xsd:documentation>
+                <![CDATA[Renders a public resource URI for a given file in a given collection.]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute type="xsd:string" name="collectionName" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The name of the collection for which the URI should be rendered.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="path" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The path to the file within the collection for which the URI should be rendered.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="widget.autocomplete">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[Usage:
+<f:input id="name" ... />
+<f:widget.autocomplete for="name" objects="{posts}" searchProperty="author">]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute type="xsd:string" name="widgetId">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[Unique identifier of the widget instance]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="objects" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[Query result which will be used to search for autocomplete items.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="searchProperty" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The value the user types in will be search in this property.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="id" use="required">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The id of the container which will contain the autocomplete data.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="maxItems">
+                <xsd:annotation>
+                    <xsd:documentation>
+                        <![CDATA[The maximum number of items returned for display in the autocomplete widget.]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="widget.paginate">
+        <xsd:annotation>
+            <xsd:documentation><![CDATA[Changes the look of the default Fluid pagination widget]]></xsd:documentation>
+        </xsd:annotation>
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:any minOccurs="0" maxOccurs="unbounded"/>
+            </xsd:sequence>
+            <xsd:attribute type="xsd:string" name="objects" use="required">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="as" use="required">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="configuration">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute type="xsd:string" name="widgetId">
+                <xsd:annotation>
+                    <xsd:documentation><![CDATA[Unique identifier of the widget instance]]></xsd:documentation>
+                </xsd:annotation>
+            </xsd:attribute>
+        </xsd:complexType>
+    </xsd:element>
+</xsd:schema>
