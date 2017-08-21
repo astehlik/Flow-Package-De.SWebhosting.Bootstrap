@@ -134,13 +134,13 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
         foreach ($messages as $message) {
             $controllerId = $controllerPrefix . $message->getCode();
             $translatedMessage = $this->translateById($controllerId);
-            if ($translatedMessage === $controllerId) {
+            if ($this->isTranslationAvailable($translatedMessage, $controllerId)) {
                 $propertyId = $propertyPrefix . $message->getCode();
                 $translatedMessage = $this->translateById($propertyId);
-                if ($translatedMessage === $propertyId) {
+                if ($this->isTranslationAvailable($translatedMessage, $propertyId)) {
                     $genericId = $genericPrefix . $message->getCode();
                     $translatedMessage = $this->translateById($genericId);
-                    if ($genericId === $translatedMessage) {
+                    if ($this->isTranslationAvailable($translatedMessage, $genericId)) {
                         $translatedMessage = $message . ' [' . $controllerId . ' or ' . $propertyId . ' or ' . $genericId . ']';
                     }
                 }
@@ -209,6 +209,16 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
             $messages = array_merge($messages, $messageArray);
         }
         return $messages;
+    }
+
+    /**
+     * @param string|null $translatedMessage
+     * @param string $controllerId
+     * @return bool
+     */
+    protected function isTranslationAvailable($translatedMessage, string $controllerId): bool
+    {
+        return $translatedMessage === $controllerId || empty($translatedMessage);
     }
 
     /**
