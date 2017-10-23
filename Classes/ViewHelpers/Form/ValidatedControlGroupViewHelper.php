@@ -12,8 +12,6 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use Neos\FluidAdaptor\Core\ViewHelper\AbstractTagBasedViewHelper;
-
 /**
  * Displays a tag with different classes depending on the validation state.
  */
