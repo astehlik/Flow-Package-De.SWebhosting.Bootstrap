@@ -13,6 +13,7 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Widget;
  *                                                                        */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Persistence\QueryResultInterface;
 use Neos\FluidAdaptor\Core\Widget\AbstractWidgetViewHelper;
 
 /**
@@ -38,7 +39,7 @@ class AutocompleteViewHelper extends AbstractWidgetViewHelper
         parent::initializeArguments();
         $this->registerArgument(
             'objects',
-            'QueryResultInterface',
+            QueryResultInterface::class,
             'Query result which will be used to search for autocomplete items.',
             true
         );
