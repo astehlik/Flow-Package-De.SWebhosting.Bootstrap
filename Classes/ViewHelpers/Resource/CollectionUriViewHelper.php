@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace De\SWebhosting\Bootstrap\ViewHelpers\Resource;
 
 /*                                                                        *
@@ -12,16 +14,19 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Resource;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use InvalidArgumentException;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\ResourceManagement\ResourceManager;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Renders a public resource URI for a given file in a given collection.
  */
-class CollectionUriViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper
+class CollectionUriViewHelper extends AbstractViewHelper
 {
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\ResourceManagement\ResourceManager
+     * @var ResourceManager
      */
     protected $resourceManager;
 
@@ -35,7 +40,7 @@ class CollectionUriViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper\Abstrac
         $collection = $this->resourceManager->getCollection($collectionName);
 
         if (!isset($collection)) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'The collection %s was not found. Please make sure you have configured this collection before using it.',
                     $collectionName

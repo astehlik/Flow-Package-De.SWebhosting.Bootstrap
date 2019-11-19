@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace De\SWebhosting\Bootstrap\ViewHelpers\Widget\Controller;
 
 /*                                                                        *
@@ -13,9 +15,10 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Widget\Controller;
  *                                                                        */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Persistence\PersistenceManagerInterface;
 use Neos\Flow\Persistence\QueryResultInterface;
-use Neos\Utility\ObjectAccess;
 use Neos\FluidAdaptor\Core\Widget\AbstractWidgetController;
+use Neos\Utility\ObjectAccess;
 
 /**
  * Controller for the auto-complete widget
@@ -24,7 +27,7 @@ class AutocompleteController extends AbstractWidgetController
 {
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\Persistence\PersistenceManagerInterface
+     * @var PersistenceManagerInterface
      */
     protected $persistenceManager;
 
@@ -43,8 +46,10 @@ class AutocompleteController extends AbstractWidgetController
         if ($constraint !== null) {
             $query->matching(
                 $query->logicalAnd(
-                    $constraint,
-                    $query->like($searchProperty, '%' . $term . '%', false)
+                    [
+                        $constraint,
+                        $query->like($searchProperty, '%' . $term . '%', false),
+                    ]
                 )
             );
         } else {
@@ -69,7 +74,7 @@ class AutocompleteController extends AbstractWidgetController
             $output[] = [
                 'id' => $this->persistenceManager->getIdentifierByObject($singleResult),
                 'label' => $val,
-                'value' => $val
+                'value' => $val,
             ];
         }
         return json_encode($output);

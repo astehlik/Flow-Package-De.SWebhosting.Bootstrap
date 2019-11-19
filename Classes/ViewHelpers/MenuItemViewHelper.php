@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace De\SWebhosting\Bootstrap\ViewHelpers;
 
 /*                                                                        *
@@ -12,7 +14,11 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use De\SWebhosting\Bootstrap\Utility\PointcutUtility;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Mvc\ActionRequest;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractTagBasedViewHelper;
+use RuntimeException;
 
 /**
  * This view helper renders a configurable HTML tag and if the current
@@ -22,11 +28,11 @@ use Neos\Flow\Annotations as Flow;
  *
  * @Flow\Scope("prototype")
  */
-class MenuItemViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper\AbstractTagBasedViewHelper
+class MenuItemViewHelper extends AbstractTagBasedViewHelper
 {
     /**
      * @Flow\Inject
-     * @var \De\SWebhosting\Bootstrap\Utility\PointcutUtility
+     * @var PointcutUtility
      */
     protected $pointcutUtility;
 
@@ -68,7 +74,6 @@ class MenuItemViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper\AbstractTagB
         return $this->tag->render();
     }
 
-
     /**
      * Checks if the given controller / action name matches the current
      * controller / action.
@@ -79,8 +84,8 @@ class MenuItemViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper\AbstractTagB
     protected function matchCurrentControllerAction($activeControllerActionFilter)
     {
         $request = $this->controllerContext->getRequest();
-        if (!$request instanceof \Neos\Flow\Mvc\ActionRequest) {
-            throw new \RuntimeException(
+        if (!$request instanceof ActionRequest) {
+            throw new RuntimeException(
                 'The MenuItemViewHelper only works in \\TYPO3\\Flow\\Mvc\\ActionRequest context.', 1425850365
             );
         }

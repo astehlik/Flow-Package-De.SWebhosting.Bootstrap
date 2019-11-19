@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
 
 /*                                                                        *
@@ -12,10 +14,14 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use Neos\Error\Messages\Result;
+use Neos\Flow\Mvc\ActionRequest;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractTagBasedViewHelper;
+
 /**
  * Displays a tag with different classes depending on the validation state.
  */
-class ValidatedControlGroupViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper\AbstractTagBasedViewHelper
+class ValidatedControlGroupViewHelper extends AbstractTagBasedViewHelper
 {
     /**
      * Initialize all arguments.
@@ -89,9 +95,9 @@ class ValidatedControlGroupViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper
             $this->tag->setTagName($this->arguments['tagName']);
         }
 
-        /** @var $request \Neos\Flow\Mvc\ActionRequest */
+        /** @var $request ActionRequest */
         $request = $this->controllerContext->getRequest();
-        /** @var $validationResults \Neos\Error\Messages\Result */
+        /** @var $validationResults Result */
         $validationResults = $request->getInternalArgument('__submittedArgumentValidationResults');
         if ($validationResults !== null && $for !== '') {
             $validationResults = $validationResults->forProperty($for);

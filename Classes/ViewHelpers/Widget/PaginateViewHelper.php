@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace De\SWebhosting\Bootstrap\ViewHelpers\Widget;
 
 /*                                                                        *
@@ -12,6 +14,7 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Widget;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use De\SWebhosting\Bootstrap\ViewHelpers\Widget\Controller\PaginateController;
 use Neos\Flow\Annotations as Flow;
 
 /**
@@ -21,7 +24,7 @@ class PaginateViewHelper extends \Neos\FluidAdaptor\ViewHelpers\Widget\PaginateV
 {
     /**
      * @Flow\Inject
-     * @var \De\SWebhosting\Bootstrap\ViewHelpers\Widget\Controller\PaginateController
+     * @var PaginateController
      */
     protected $controller;
 }

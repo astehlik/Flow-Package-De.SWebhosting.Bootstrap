@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace De\SWebhosting\Bootstrap\Utility;
 
 /*                                                                        *
@@ -13,7 +15,11 @@ namespace De\SWebhosting\Bootstrap\Utility;
  *                                                                        */
 
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\Aop\Builder\ProxyClassBuilder;
+use Neos\Flow\Aop\Pointcut\PointcutExpressionParser;
 use Neos\Flow\Mvc\ActionRequest;
+use Neos\Flow\ObjectManagement\ObjectManagerInterface;
+use Neos\Flow\Reflection\ReflectionService;
 
 /**
  * Utility class for pointcut handling.
@@ -22,13 +28,13 @@ class PointcutUtility
 {
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\ObjectManagement\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     protected $objectManager;
 
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\Aop\Pointcut\PointcutExpressionParser
+     * @var PointcutExpressionParser
      */
     protected $pointcutExpressionParser;
 
@@ -41,13 +47,13 @@ class PointcutUtility
 
     /**
      * @Flow\Inject(lazy=false)
-     * @var \Neos\Flow\Aop\Builder\ProxyClassBuilder
+     * @var ProxyClassBuilder
      */
     protected $proxyClassBuilder;
 
     /**
      * @Flow\Inject(lazy=false)
-     * @var \Neos\Flow\Reflection\ReflectionService
+     * @var ReflectionService
      */
     protected $reflectionService;
 

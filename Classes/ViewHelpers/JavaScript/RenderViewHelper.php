@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace De\SWebhosting\Bootstrap\ViewHelpers\JavaScript;
 
 /*                                                                        *
@@ -12,12 +14,14 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\JavaScript;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use De\SWebhosting\Bootstrap\Utility\JavaScriptContainer;
 use Neos\Flow\Annotations as Flow;
+use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Renders JavaScript code that was registered for the given section.
  */
-class RenderViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper
+class RenderViewHelper extends AbstractViewHelper
 {
     /**
      * We render HTML code and to not want it to be escaped.
@@ -27,7 +31,7 @@ class RenderViewHelper extends \Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHe
     protected $escapeOutput = false;
 
     /**
-     * @var \De\SWebhosting\Bootstrap\Utility\JavaScriptContainer
+     * @var JavaScriptContainer
      * @Flow\Inject
      */
     protected $javascriptContainer;

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace De\SWebhosting\Bootstrap\ViewHelpers\Widget;
 
 /*                                                                        *
@@ -12,6 +14,7 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Widget;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use De\SWebhosting\Bootstrap\ViewHelpers\Widget\Controller\AutocompleteController;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\Persistence\QueryResultInterface;
 use Neos\FluidAdaptor\Core\Widget\AbstractWidgetViewHelper;
@@ -30,7 +33,7 @@ class AutocompleteViewHelper extends AbstractWidgetViewHelper
 
     /**
      * @Flow\Inject
-     * @var \De\SWebhosting\Bootstrap\ViewHelpers\Widget\Controller\AutocompleteController
+     * @var AutocompleteController
      */
     protected $controller;
 

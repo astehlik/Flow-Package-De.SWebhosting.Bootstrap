@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
 
@@ -13,7 +14,11 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use Neos\Error\Messages\Message;
+use Neos\Error\Messages\Result;
 use Neos\Flow\Annotations as Flow;
+use Neos\Flow\I18n\Translator;
+use Neos\Flow\Mvc\ActionRequest;
 use Neos\FluidAdaptor\Core\Parser\TemplateParser;
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 
@@ -31,7 +36,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
 
     /**
      * @Flow\Inject
-     * @var \Neos\Flow\I18n\Translator
+     * @var Translator
      */
     protected $translator;
 
@@ -74,7 +79,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
     /**
      * Builds the translated error messages for the given parameters.
      *
-     * @param \Neos\Error\Messages\Result $validationResult
+     * @param Result $validationResult
      * @param string $forProperty
      * @param string $originalProperty
      * @param boolean $includeChildProperties
@@ -84,7 +89,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
     {
         $errorMessages = [];
 
-        /** @var \Neos\Flow\Mvc\ActionRequest $request */
+        /** @var ActionRequest $request */
         $request = $this->controllerContext->getRequest();
 
         $for = $originalProperty;
@@ -127,7 +132,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
 
         $templateParser = $this->getTemplateParser();
 
-        /** @var \Neos\Error\Messages\Message $message */
+        /** @var Message $message */
         foreach ($messages as $message) {
             $controllerId = $controllerPrefix . $message->getCode();
             $translatedMessage = $this->translateById($controllerId);
@@ -155,7 +160,6 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
      * Renders all error messages to a string seperated by line breaks.
      *
      * @return string
-     * @throws \Neos\FluidAdaptor\Core\ViewHelper\Exception\InvalidVariableException
      */
     protected function getErrorMessages()
     {
@@ -169,7 +173,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
             $this->arguments['validationResultsVariableName']
         );
 
-        /** @var \Neos\Error\Messages\Result $validationResult */
+        /** @var Result $validationResult */
         $validationResult = $validationResultData['validationResults'];
         if (!isset($validationResult)) {
             return $errorMessages;
@@ -197,7 +201,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
      * Flattens the given array of property messages.
      *
      * @param array $propertyMessages
-     * @return \Neos\Error\Messages\Message[]
+     * @return Message[]
      */
     protected function getFattenedMessages($propertyMessages)
     {
@@ -226,7 +230,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
      */
     protected function translateById($id)
     {
-        /** @var \Neos\Flow\Mvc\ActionRequest $request */
+        /** @var ActionRequest $request */
         $request = $this->controllerContext->getRequest();
         return $this->translator->translateById($id, [], null, null, 'Main', $request->getControllerPackageKey());
     }
