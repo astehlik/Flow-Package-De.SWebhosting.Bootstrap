@@ -44,6 +44,9 @@ class MenuItemViewHelper extends AbstractTagBasedViewHelper
      */
     public function initializeArguments()
     {
+        $this->registerArgument('activeControllerActionFilter', 'string', '', false, null);
+        $this->registerArgument('activeClass', 'string', '', false, 'active');
+        $this->registerArgument('tagName', 'string', '', false, 'li');
         $this->registerUniversalTagAttributes();
     }
 
@@ -51,13 +54,14 @@ class MenuItemViewHelper extends AbstractTagBasedViewHelper
      * Renders the HTML element and adds an additional active class if
      * controller / action is matching.
      *
-     * @param string $activeControllerActionFilter
-     * @param string $activeClass
-     * @param string $tagName
      * @return string
      */
-    public function render($activeControllerActionFilter = null, $activeClass = 'active', $tagName = 'li')
+    public function render()
     {
+        $activeControllerActionFilter = $this->arguments['activeControllerActionFilter'];
+        $activeClass = $this->arguments['activeClass'];
+        $tagName = $this->arguments['tagName'];
+
         $class = '';
 
         if ($this->hasArgument('class') && $this->arguments['class'] !== '') {
