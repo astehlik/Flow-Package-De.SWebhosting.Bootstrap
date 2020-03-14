@@ -1,4 +1,0 @@
-
-## JavaScript
-
-### The JavaScript container
