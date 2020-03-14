@@ -22,11 +22,9 @@ if you want to use them:
 ```
 {namespace bs=De\SWebhosting\Bootstrap\ViewHelpers}
 ```
- 
-Here is a brief overview about the available view helpers. You can find
-detailed descriptions of each of them in the ```Documentation/ViewHelpers```
-folder.
- 
+
+Here is a brief overview about the available view helpers.
+
 Name                             | Purpose
 -------------------------------- | -------
 form.inlineHelpOrErrors          | Displays [inline help] (http://getbootstrap.com/css/#forms-help-text) or error messages for a form element.
