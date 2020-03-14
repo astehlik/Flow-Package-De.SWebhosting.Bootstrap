@@ -2,10 +2,10 @@
 # De.SWebhosting.Bootstrap - Frontend utilites for the Neos Flow framework
 
 This package provides some view helpers and utility functions
-for TYPO3 Flow that can make Frontend development easier.
+for the [Flow framework](https://flow.neos.io) that can make Frontend development easier.
 
 The default ouput of the view helpers is optimized to work
-with the [Bootstrap] (http://getbootstrap.com) framework
+with the [Bootstrap](http://getbootstrap.com) framework
 (therefore the name) but can be useful with other frameworks
 or custom styles as well.
 
