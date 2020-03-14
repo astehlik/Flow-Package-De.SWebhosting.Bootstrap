@@ -1,5 +1,5 @@
 
-# De.SWebhosting.Bootstrap - Frontend utilites for TYPO3 Flow
+# De.SWebhosting.Bootstrap - Frontend utilites for the Neos Flow framework
 
 This package provides some view helpers and utility functions
 for TYPO3 Flow that can make Frontend development easier.
