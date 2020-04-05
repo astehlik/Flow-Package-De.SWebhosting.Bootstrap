@@ -4,7 +4,7 @@
     "description": "Makes Bootstrap framework integration easier and provides utility view helpers and classes for JS loading and resource handling.",
     "license": "GPL-3.0-or-later",
     "require": {
-        "neos/flow": "*"
+        "neos/flow": "^6.0.0"
     },
     "suggest": {
         "twbs/bootstrap": "The output of the view helpers of this package is optimized for the Bootstrap framework (http://getbootstrap.com/)."
