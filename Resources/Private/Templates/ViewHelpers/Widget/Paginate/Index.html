@@ -1,72 +1,93 @@
-<f:if condition="{configuration.insertAbove}">
-	<f:render section="paginator" arguments="{pagination: pagination}" />
-</f:if>
+<div xmlns:f="http://typo3.org/ns/TYPO3/Fluid/ViewHelpers"
+  data-namespace-typo3-fluid="true">
+  <f:if condition="{configuration.insertAbove}">
+    <f:render section="paginator" arguments="{pagination: pagination}"/>
+  </f:if>
 
-<f:renderChildren arguments="{contentArguments}" />
+  <f:renderChildren arguments="{contentArguments}"/>
 
-<f:if condition="{configuration.insertBelow}">
-	<f:render section="paginator" arguments="{pagination: pagination}" />
-</f:if>
+  <f:if condition="{configuration.insertBelow}">
+    <f:render section="paginator" arguments="{pagination: pagination}"/>
+  </f:if>
 
-<f:section name="paginator">
-	<f:if condition="{pagination.numberOfPages} > 1">
-		<div class="pagination-wrapper">
-			<ul class="pagination pagination-centered typo3-widget-paginator">
-				<f:if condition="{pagination.previousPage}">
-					<li class="previous">
-						<f:if condition="{pagination.previousPage} > 1">
-							<f:then>
-								<f:widget.link action="index" arguments="{currentPage: pagination.previousPage}"><f:translate id="viewHelper.paginate.previous">previous</f:translate></f:widget.link>
-							</f:then>
-							<f:else>
-								<f:widget.link action="index"><f:translate id="viewHelper.paginate.previous">previous</f:translate></f:widget.link>
-							</f:else>
-						</f:if>
-					</li>
-				</f:if>
-				<f:if condition="{pagination.displayRangeStart} > 1">
-					<li class="first">
-						<f:widget.link action="index">1</f:widget.link>
-					</li>
-				</f:if>
-				<f:if condition="{pagination.hasLessPages}">
-					<li><span>...</span></li>
-				</f:if>
-				<f:for each="{pagination.pages}" as="page">
-					<f:if condition="{page.isCurrent}">
-						<f:then>
-							<li class="active">
-								<span>{page.number}</span>
-							</li>
-						</f:then>
-						<f:else>
-							<li>
-								<f:if condition="{page.number} > 1">
-									<f:then>
-										<f:widget.link action="index" arguments="{currentPage: page.number}">{page.number}</f:widget.link>
-									</f:then>
-									<f:else>
-										<f:widget.link action="index">{page.number}</f:widget.link>
-									</f:else>
-								</f:if>
-							</li>
-						</f:else>
-					</f:if>
-				</f:for>
-				<f:if condition="{pagination.hasMorePages}">
-					<li><span>...</span></li>
-				</f:if>
-				<f:if condition="{pagination.displayRangeEnd} < {pagination.numberOfPages}">
-					<li class="last">
-						<f:widget.link action="index" arguments="{currentPage: pagination.numberOfPages}">{pagination.numberOfPages}</f:widget.link>
-					</li>
-				</f:if>
-				<f:if condition="{pagination.nextPage}">
-					<li class="next">
-						<f:widget.link action="index" arguments="{currentPage: pagination.nextPage}"><f:translate id="viewHelper.paginate.next">next</f:translate></f:widget.link>
-					</li>
-				</f:if>
-			</ul>
-		</div>
-	</f:if>
-</f:section>
+  <f:section name="paginator">
+
+  <f:if condition="{pagination.numberOfPages} > 1">
+    <nav class="pagination-wrapper">
+      <ul class="pagination">
+        <f:if condition="{pagination.previousPage}">
+          <li class="page-item previous">
+            <f:if condition="{pagination.previousPage} > 1">
+              <f:then>
+                <f:widget.link arguments="{currentPage: pagination.previousPage}" action="index" class="page-link">
+                  <f:translate id="viewHelper.paginate.previous">previous</f:translate></f:widget.link>
+              </f:then>
+
+              <f:else>
+                <f:widget.link action="index" class="page-link">
+                  <f:translate id="viewHelper.paginate.previous">previous</f:translate>
+                </f:widget.link>
+              </f:else>
+            </f:if>
+          </li>
+        </f:if>
+
+        <f:if condition="{pagination.displayRangeStart} > 1">
+          <li class="page-item first">
+            <f:widget.link action="index" class="page-link">1</f:widget.link>
+          </li>
+        </f:if>
+
+        <f:if condition="{pagination.hasLessPages}">
+          <li class="page-item disabled"><span class="page-link">...</span></li>
+        </f:if>
+
+        <f:for each="{pagination.pages}" as="page">
+          <f:if condition="{page.isCurrent}">
+            <f:then>
+              <li class="page-item active">
+                <span class="page-link">{page.number}</span>
+              </li>
+            </f:then>
+
+            <f:else>
+              <li class="page-item">
+                <f:if condition="{page.number} > 1">
+                  <f:then>
+                    <f:widget.link arguments="{currentPage: page.number}" action="index" class="page-link">
+                      {page.number}
+                    </f:widget.link>
+                  </f:then>
+
+                  <f:else>
+                    <f:widget.link action="index" class="page-link">{page.number}</f:widget.link>
+                  </f:else>
+                </f:if>
+              </li>
+            </f:else>
+          </f:if>
+        </f:for>
+
+        <f:if condition="{pagination.hasMorePages}">
+          <li class="page-item disabled"><span class="page-link">...</span></li>
+        </f:if>
+
+        <f:if condition="{pagination.displayRangeEnd} < {pagination.numberOfPages}">
+          <li class="page-item last">
+            <f:widget.link arguments="{currentPage: pagination.numberOfPages}" action="index" class="page-link">
+              {pagination.numberOfPages}
+            </f:widget.link>
+          </li>
+        </f:if>
+
+        <f:if condition="{pagination.nextPage}">
+          <li class="page-item next">
+            <f:widget.link arguments="{currentPage: pagination.nextPage}" action="index" class="page-link">
+              <f:translate id="viewHelper.paginate.next">next</f:translate></f:widget.link>
+          </li>
+        </f:if>
+      </ul>
+    </nav>
+  </f:if>
+  </f:section>
+</div>
