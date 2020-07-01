@@ -47,6 +47,13 @@ class ValidatedControlGroupViewHelper extends AbstractTagBasedViewHelper
             ''
         );
         $this->registerArgument(
+            'formControlId',
+            'string',
+            'The HTML ID of the form field.',
+            false,
+            ''
+        );
+        $this->registerArgument(
             'as',
             'string',
             'The variable name in which the validation results should be stored.',
@@ -117,10 +124,12 @@ class ValidatedControlGroupViewHelper extends AbstractTagBasedViewHelper
         }
 
         $this->templateVariableContainer->add($as, ['validationResults' => $validationResults, 'for' => $for]);
+        $this->templateVariableContainer->add('formGroupFieldId', $this->arguments['formControlId']);
 
         $this->tag->setContent($this->renderChildren());
         $result = $this->tag->render();
 
+        $this->templateVariableContainer->remove('formGroupFieldId');
         $this->templateVariableContainer->remove($as);
 
         return $result;
