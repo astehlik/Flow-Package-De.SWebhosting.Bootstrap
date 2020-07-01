@@ -14,27 +14,18 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use De\SWebhosting\Bootstrap\Utility\PointcutUtility;
-use Neos\Flow\Annotations as Flow;
-use Neos\Flow\Mvc\ActionRequest;
+use De\SWebhosting\Bootstrap\Utility\ControllerActionMatchingTrait;
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractTagBasedViewHelper;
-use RuntimeException;
 
 /**
  * This view helper renders a configurable HTML tag and if the current
  * controller / action matches the configured active controller / action
  * the configured active class will be added to the class property of
  * the HTML element.
- *
- * @Flow\Scope("prototype")
  */
 class MenuItemViewHelper extends AbstractTagBasedViewHelper
 {
-    /**
-     * @Flow\Inject
-     * @var PointcutUtility
-     */
-    protected $pointcutUtility;
+    use ControllerActionMatchingTrait;
 
     /**
      * Initialize all arguments. You need to override this method and call
@@ -76,24 +67,5 @@ class MenuItemViewHelper extends AbstractTagBasedViewHelper
         $this->tag->setContent($this->renderChildren());
         $this->tag->addAttribute('class', $class);
         return $this->tag->render();
-    }
-
-    /**
-     * Checks if the given controller / action name matches the current
-     * controller / action.
-     *
-     * @param string $activeControllerActionFilter
-     * @return bool
-     */
-    protected function matchCurrentControllerAction($activeControllerActionFilter)
-    {
-        $request = $this->controllerContext->getRequest();
-        if (!$request instanceof ActionRequest) {
-            throw new RuntimeException(
-                'The MenuItemViewHelper only works in \\TYPO3\\Flow\\Mvc\\ActionRequest context.', 1425850365
-            );
-        }
-
-        return $this->pointcutUtility->matchControllerActionMethod($activeControllerActionFilter, $request);
     }
 }
