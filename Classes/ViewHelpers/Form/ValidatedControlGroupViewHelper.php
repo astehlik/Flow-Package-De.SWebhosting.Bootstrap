@@ -40,6 +40,13 @@ class ValidatedControlGroupViewHelper extends AbstractTagBasedViewHelper
             ''
         );
         $this->registerArgument(
+            'property',
+            'string',
+            'Alias for "for" to prevent IDE errors because the IDs do not exists.',
+            false,
+            ''
+        );
+        $this->registerArgument(
             'as',
             'string',
             'The variable name in which the validation results should be stored.',
@@ -84,7 +91,7 @@ class ValidatedControlGroupViewHelper extends AbstractTagBasedViewHelper
      */
     public function render()
     {
-        $for = $this->arguments['for'];
+        $for = $this->arguments['for'] ?? $this->arguments['property'];
         $as = $this->arguments['as'];
 
         if ($this->arguments['defaultClass'] !== '') {
@@ -95,7 +102,6 @@ class ValidatedControlGroupViewHelper extends AbstractTagBasedViewHelper
             $this->tag->setTagName($this->arguments['tagName']);
         }
 
-        /** @var $request ActionRequest */
         $request = $this->controllerContext->getRequest();
         /** @var $validationResults Result */
         $validationResults = $request->getInternalArgument('__submittedArgumentValidationResults');
