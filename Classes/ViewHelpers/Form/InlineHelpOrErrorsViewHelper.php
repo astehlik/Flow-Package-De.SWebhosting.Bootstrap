@@ -103,9 +103,8 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
 
         $for = $this->arguments['additionalPropertyPrefix'] . ($for ? $for . '.' : '');
         $translationPrefix = $this->arguments['translationPrefix'];
-        $controllerPrefix = $translationPrefix . 'controller.' . lcfirst(
-                $request->getControllerName()
-            ) . '.' . $request->getControllerActionName() . '.' . $for;
+        $controllerPrefix = $translationPrefix . 'controller.' . lcfirst($request->getControllerName())
+            . '.' . $request->getControllerActionName() . '.' . $for;
         $propertyPrefix = $translationPrefix . 'property.' . $for;
         $genericPrefix = $translationPrefix . 'generic.';
 

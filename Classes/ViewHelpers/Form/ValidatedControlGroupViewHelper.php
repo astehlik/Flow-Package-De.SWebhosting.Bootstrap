@@ -98,7 +98,7 @@ class ValidatedControlGroupViewHelper extends AbstractTagBasedViewHelper
      */
     public function render()
     {
-        $for = $this->arguments['for'] ?? $this->arguments['property'];
+        $for = $this->arguments['for'] ?: $this->arguments['property'];
         $as = $this->arguments['as'];
 
         if ($this->arguments['defaultClass'] !== '') {
