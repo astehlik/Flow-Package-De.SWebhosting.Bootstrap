@@ -1,54 +1,57 @@
+import * as jQuery from 'jquery';
+
 (function($) {
-
-	var formPopover = function() {
-
+	const formPopover = function() {
 		/**
 		 * jQuery reference to the popover trigger container.
 		 *
 		 * @type {object}
 		 */
-		var container;
+		let container;
 
 		/**
 		 * Reference to the popover instance.
 		 *
 		 * @type {object}
 		 */
-		var popover;
+		let popover;
+
+		let popoverContainer;
 
 		/**
 		 * The settings of the current popover.
 		 *
 		 * @type {object}
 		 */
-		var settings;
+		let settings;
 
 		/**
-		 * Returns the content that should be displayed in the popover.
-		 *
-		 * @returns {string}
+		 * Shows the current popover and updates the form values with the required data.
 		 */
-		var getPopoverContent = function() {
-			return $('.' + settings.classNamePrefix + settings.classNames.popoverContentContainer).html();
+		const showPopover = function() {
+			popover.popover('show');
+			popover.addClass(settings.classNamePrefix + 'is-open');
+
+			container.addClass(settings.classNames.containerHightlightClass);
 		};
 
-		/**
-		 * Shows or hides the popover depending on its current state.
-		 */
-		var togglePopover = function() {
+		const onPopoverShown = () => {
+			const entityId = container.find('.' + settings.classNamePrefix + settings.classNames.identifier).attr(settings.identifierAttribute);
+			popoverContainer.find('.' + settings.classNamePrefix + settings.classNames.identifierInput).val(entityId);
 
-			if (container.find('.' + settings.classNamePrefix + 'is-open').length) {
-				closePopover();
-			} else {
-				showPopover();
-			}
-		};
+			const closeButton = popoverContainer.find('.' + settings.classNamePrefix + settings.classNames.closeButton);
+			closeButton.click(function(e) {
+				e.preventDefault();
+				closePopover(container, popover)
+			});
+
+			popoverContainer.find('.' + settings.classNamePrefix + settings.classNames.submitButton).focus();
+		}
 
 		/**
 		 * Closes the current popover.
 		 */
-		var closePopover = function() {
-
+		const closePopover = function() {
 			container.removeClass(settings.classNames.containerHightlightClass);
 
 			popover.popover('hide');
@@ -56,25 +59,24 @@
 		};
 
 		/**
-		 * Shows the current popover and updates the form values with the required data.
+		 * Returns the content that should be displayed in the popover.
+		 *
+		 * @returns {string}
 		 */
-		var showPopover = function() {
+		const getPopoverContent = function() {
+			console.log('getting');
+			return $('.' + settings.classNamePrefix + settings.classNames.popoverContentContainer).html();
+		};
 
-			popover.popover('show');
-			popover.addClass(settings.classNamePrefix + 'is-open');
-
-			var entityId = container.find('.' + settings.classNamePrefix + settings.classNames.identifier).attr(settings.identifierAttribute);
-			container.find('.' + settings.classNamePrefix + settings.classNames.identifierInput).val(entityId);
-
-			var closeButton = container.find('.' + settings.classNamePrefix + settings.classNames.closeButton);
-			closeButton.click(function(e) {
-				e.preventDefault();
-				closePopover(container, popover)
-			});
-
-			container.find('.' + settings.classNamePrefix + settings.classNames.submitButton).focus();
-
-			container.addClass(settings.classNames.containerHightlightClass);
+		/**
+		 * Shows or hides the popover depending on its current state.
+		 */
+		const togglePopover = function() {
+			if (container.find('.' + settings.classNamePrefix + 'is-open').length) {
+				closePopover();
+			} else {
+				showPopover();
+			}
 		};
 
 		/**
@@ -84,27 +86,29 @@
 		 * @param {object} settingsParam
 		 */
 		this.initialize = function(containerParam, settingsParam) {
-
 			container = containerParam;
 			settings = settingsParam;
+			popoverContainer = $('#main-popover-container');
 
-			var popoverTrigger = container.find('.' + settings.classNamePrefix + settings.classNames.popoverTrigger);
+			const popoverTrigger = container.find('.' + settings.classNamePrefix + settings.classNames.popoverTrigger);
 
-			var popoverSettings = $.extend(
+			const popoverSettings = $.extend(
 				{
-					content: getPopoverContent()
+					content: getPopoverContent,
 				},
 				settings.popover
 			);
 
-			var originalTitle = popoverTrigger.attr('title');
+			const originalTitle = popoverTrigger.attr('title');
 			popover = popoverTrigger.popover(popoverSettings);
+			popover.on('shown.bs.popover', onPopoverShown);
 
 			// Somehow the popover kills the title from the title attribute.
 			// This is why we restore it after the popover is initialized.
 			popoverTrigger.attr('title', originalTitle);
 
 			popoverTrigger.click(function(e) {
+				console.log('clicking');
 				e.preventDefault();
 				togglePopover();
 			});
@@ -112,14 +116,15 @@
 	};
 
 	$.fn.formPopover = function(options) {
-
-		var settings = {
+		const settings = {
 			classNamePrefix: 'de-swebhosting-bootstrap-form-popover-',
 			identifierAttribute: 'data-de-swebhosting-bootstrap-form-popover-identifier',
 			popover: {
 				html: true,
+				sanitize: false,
 				placement: 'left',
-				trigger: 'manual'
+				trigger: 'manual',
+				container: '#main-popover-container',
 			},
 			classNames: {
 				identifier: 'identifier',
@@ -128,7 +133,7 @@
 				popoverContentContainer: 'content',
 				closeButton: 'close',
 				submitButton: 'submit',
-				containerHightlightClass: 'danger'
+				containerHightlightClass: 'table-danger'
 			}
 		};
 
@@ -139,7 +144,7 @@
 		);
 
 		return this.each(function() {
-			var popover = new formPopover();
+			const popover = new formPopover();
 			popover.initialize($(this), settings);
 		});
 	}
