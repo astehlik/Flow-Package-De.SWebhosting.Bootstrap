@@ -30,7 +30,6 @@ Name                             | Purpose
 form.inlineHelpOrErrors          | Displays [inline help] (http://getbootstrap.com/css/#forms-help-text) or error messages for a form element.
 form.validatedControlGroup       | Displays a form group with [classes depending on validation errors] (http://getbootstrap.com/css/#forms-control-validation).
 format.trimWhiteSpaceBetweenHtml | Removes all whitespace between HTML elements.
-javaScript.append                | Appends content to the JavaScript container, see section "JavaScript container" below.
 javaScript.render                | Renders contents of the JavaScript container, see section "JavaScript container" below.
 resource.collectionUri           | Renders the public URI to a resource within a custom collection. Requires [TYPO3 Flow patch] (https://review.typo3.org/#/c/37686/)!
 widget.autocomplete              | A widget to enable autocompletion for an input field. Requires [jQuery UI] (https://jqueryui.com/autocomplete/)!

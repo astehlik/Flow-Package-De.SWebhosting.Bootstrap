@@ -170,31 +170,6 @@ that are rendered in its children.]]></xsd:documentation>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-    <xsd:element name="javaScript.append">
-        <xsd:annotation>
-            <xsd:documentation><![CDATA[Appends JavaScript code to a section.]]></xsd:documentation>
-        </xsd:annotation>
-        <xsd:complexType mixed="true">
-            <xsd:sequence>
-                <xsd:any minOccurs="0" maxOccurs="unbounded"/>
-            </xsd:sequence>
-            <xsd:attribute type="xsd:string" name="script">
-                <xsd:annotation>
-                    <xsd:documentation><![CDATA[]]></xsd:documentation>
-                </xsd:annotation>
-            </xsd:attribute>
-            <xsd:attribute type="xsd:string" name="src">
-                <xsd:annotation>
-                    <xsd:documentation><![CDATA[]]></xsd:documentation>
-                </xsd:annotation>
-            </xsd:attribute>
-            <xsd:attribute type="xsd:string" name="section">
-                <xsd:annotation>
-                    <xsd:documentation><![CDATA[]]></xsd:documentation>
-                </xsd:annotation>
-            </xsd:attribute>
-        </xsd:complexType>
-    </xsd:element>
     <xsd:element name="javaScript.render">
         <xsd:annotation>
             <xsd:documentation>
