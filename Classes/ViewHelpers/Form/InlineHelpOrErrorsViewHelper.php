@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
@@ -14,12 +15,11 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
-use Neos\Error\Messages\Message;
-use Neos\Error\Messages\Result;
-use Neos\Flow\Annotations as Flow;
+use De\SWebhosting\Bootstrap\Messages\MessageCollector;
+use De\SWebhosting\Bootstrap\Messages\MessageRenderer;
+use De\SWebhosting\Bootstrap\Messages\MessageSettings;
+use De\SWebhosting\Bootstrap\Messages\MessageTranslator;
 use Neos\Flow\I18n\Translator;
-use Neos\Flow\Mvc\ActionRequest;
-use Neos\FluidAdaptor\Core\Parser\TemplateParser;
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -35,25 +35,13 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
     protected $escapeOutput = false;
 
     /**
-     * @Flow\Inject
      * @var Translator
      */
-    protected $translator;
+    private $translator;
 
-    /**
-     * Initialize all arguments.
-     *
-     * @return void
-     */
-    public function initializeArguments()
+    public function __construct(Translator $translator)
     {
-        $this->registerArgument('validationResultsVariableName', 'string', '', false, 'validationResults');
-        $this->registerArgument('translationPrefix', 'string', '', false, 'error.');
-        $this->registerArgument('additionalPropertyPrefix', 'string', '', false, '');
-        $this->registerArgument('flattenMessages', 'boolean', '', false, true);
-        $this->registerArgument('forProperties', 'array', '');
-        $this->registerArgument('includeChildProperties', 'array', '');
-        $this->registerArgument('excludeForPartsFromTranslationKey', 'array', '');
+        $this->translator = $translator;
     }
 
     /**
@@ -63,7 +51,7 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
      */
     public function render()
     {
-        $errorMessages = $this->getErrorMessages();
+        $errorMessages = $this->renderErrorMessages();
         if ($errorMessages !== '') {
             return '<div class="invalid-feedback">' . $errorMessages . '</div>';
         }
@@ -76,168 +64,23 @@ class InlineHelpOrErrorsViewHelper extends AbstractViewHelper
         return '<small class="form-text text-muted">' . $helpText . '</small>';
     }
 
-    /**
-     * Builds the translated error messages for the given parameters.
-     *
-     * @param Result $validationResult
-     * @param string $forProperty
-     * @param string $originalProperty
-     * @param boolean $includeChildProperties
-     * @return array
-     */
-    protected function buildErrorMessages($validationResult, $forProperty, $originalProperty, $includeChildProperties)
+    private function renderErrorMessages(): string
     {
-        $errorMessages = [];
-
-        /** @var ActionRequest $request */
-        $request = $this->controllerContext->getRequest();
-
-        $for = $originalProperty;
-        if (!empty($this->arguments['excludeForPartsFromTranslationKey']) && $for) {
-            $forParts = explode('.', $for);
-            foreach ($this->arguments['excludeForPartsFromTranslationKey'] as $excludeKey) {
-                unset($forParts[$excludeKey]);
-            }
-            $for = implode('.', $forParts);
-        }
-
-        $for = $this->arguments['additionalPropertyPrefix'] . ($for ? $for . '.' : '');
-        $translationPrefix = $this->arguments['translationPrefix'];
-        $controllerPrefix = $translationPrefix . 'controller.' . lcfirst($request->getControllerName())
-            . '.' . $request->getControllerActionName() . '.' . $for;
-        $propertyPrefix = $translationPrefix . 'property.' . $for;
-        $genericPrefix = $translationPrefix . 'generic.';
-
-        $forSubProperty = substr($forProperty, strlen($originalProperty) + 1);
-        if ($forSubProperty) {
-            $controllerPrefix .= $forSubProperty . '.';
-            $propertyPrefix .= $forSubProperty . '.';
-            $validationResult = $validationResult->forProperty($forSubProperty);
-        }
-
-        if ($includeChildProperties) {
-            $messages = $this->getFattenedMessages($validationResult->getFlattenedErrors());
-            $messages = array_merge($messages, $this->getFattenedMessages($validationResult->getFlattenedWarnings()));
-            $messages = array_merge($messages, $this->getFattenedMessages($validationResult->getFlattenedNotices()));
-        } else {
-            $messages = $validationResult->getErrors();
-            $messages = array_merge($messages, $validationResult->getWarnings());
-            $messages = array_merge($messages, $validationResult->getNotices());
-        }
-
-        if (empty($messages)) {
-            return $errorMessages;
-        }
-
-        $templateParser = $this->getTemplateParser();
-
-        /** @var Message $message */
-        foreach ($messages as $message) {
-            $controllerId = $controllerPrefix . $message->getCode();
-            $translatedMessage = $this->translateById($controllerId);
-            if ($this->isTranslationAvailable($translatedMessage, $controllerId)) {
-                $propertyId = $propertyPrefix . $message->getCode();
-                $translatedMessage = $this->translateById($propertyId);
-                if ($this->isTranslationAvailable($translatedMessage, $propertyId)) {
-                    $genericId = $genericPrefix . $message->getCode();
-                    $translatedMessage = $this->translateById($genericId);
-                    if ($this->isTranslationAvailable($translatedMessage, $genericId)) {
-                        $translatedMessage = $message . ' [' . $controllerId . ' or ' . $propertyId . ' or ' . $genericId . ']';
-                    }
-                }
-            }
-            $translatedMessage = $templateParser->parse($translatedMessage);
-            $this->templateVariableContainer->add('message', $message);
-            $errorMessages[] = $translatedMessage->getRootNode()->evaluate($this->renderingContext);
-            $this->templateVariableContainer->remove('message');
-        }
-
-        return $errorMessages;
-    }
-
-    /**
-     * Renders all error messages to a string seperated by line breaks.
-     *
-     * @return string
-     */
-    protected function getErrorMessages()
-    {
-        $errorMessages = '';
-
-        if (!$this->templateVariableContainer->exists($this->arguments['validationResultsVariableName'])) {
-            return $errorMessages;
-        }
-
-        $validationResultData = $this->templateVariableContainer->get(
-            $this->arguments['validationResultsVariableName']
+        $messageSettings = $this->viewHelperVariableContainer->get(
+            ValidatedControlGroupViewHelper::class,
+            'messageSettings'
         );
 
-        /** @var Result $validationResult */
-        $validationResult = $validationResultData['validationResults'];
-        if (!isset($validationResult)) {
-            return $errorMessages;
+        if (!$messageSettings) {
+            return '';
         }
 
-        $for = $validationResultData['for'];
-        $errorMessageArray = [];
-        if (!isset($this->arguments['forProperties'])) {
-            $errorMessageArray = $this->buildErrorMessages($validationResult, $for, $for, true);
-        } else {
-            foreach ($this->arguments['forProperties'] as $index => $propertyPath) {
-                $includeChildProperties = isset($this->arguments['includeChildProperties'][$index]) ? (bool)$this->arguments['includeChildProperties'][$index] : true;
-                $errorMessageArray = array_merge(
-                    $errorMessageArray,
-                    $this->buildErrorMessages($validationResult, $propertyPath, $for, $includeChildProperties)
-                );
-            }
-        }
-        $errorMessages = implode('<br />', $errorMessageArray);
+        $messageCollector = new MessageCollector($messageSettings);
 
-        return $errorMessages;
-    }
+        $messageTranslator = new MessageTranslator($messageSettings, $this->translator);
 
-    /**
-     * Flattens the given array of property messages.
-     *
-     * @param array $propertyMessages
-     * @return Message[]
-     */
-    protected function getFattenedMessages($propertyMessages)
-    {
-        $messages = [];
-        foreach ($propertyMessages as $messageArray) {
-            $messages = array_merge($messages, $messageArray);
-        }
-        return $messages;
-    }
+        $messageBuilder = new MessageRenderer($messageCollector, $messageTranslator, $this->renderingContext);
 
-    /**
-     * @param string|null $translatedMessage
-     * @param string $controllerId
-     * @return bool
-     */
-    protected function isTranslationAvailable($translatedMessage, string $controllerId): bool
-    {
-        return $translatedMessage === $controllerId || empty($translatedMessage);
-    }
-
-    /**
-     * Returns the translation for the given ID.
-     *
-     * @param string $id
-     * @return string
-     */
-    protected function translateById($id)
-    {
-        /** @var ActionRequest $request */
-        $request = $this->controllerContext->getRequest();
-        return $this->translator->translateById($id, [], null, null, 'Main', $request->getControllerPackageKey());
-    }
-
-    private function getTemplateParser(): TemplateParser
-    {
-        $templateParser = $this->objectManager->get(TemplateParser::class);
-        $templateParser->setRenderingContext($this->renderingContext);
-        return $templateParser;
+        return $messageBuilder->renderMessages();
     }
 }

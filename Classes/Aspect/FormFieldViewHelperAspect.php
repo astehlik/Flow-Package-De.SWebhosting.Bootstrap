@@ -1,13 +1,14 @@
 <?php
+
 declare(strict_types=1);
 
 namespace De\SWebhosting\Bootstrap\Aspect;
 
+use Neos\Error\Messages\Result;
 use Neos\Flow\Annotations as Flow;
 use Neos\Flow\AOP\JoinPointInterface;
 use Neos\FluidAdaptor\Core\ViewHelper\TemplateVariableContainer;
 use Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper;
-use ReflectionMethod;
 use ReflectionProperty;
 
 /**
@@ -31,16 +32,32 @@ class FormFieldViewHelperAspect
     private $viewHelper;
 
     /**
+     * @Flow\Around("within(Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper) && method(.*->getMappingResultsForProperty())")
+     *
+     * @param JoinPointInterface $joinPoint
+     * @return Result
+     */
+    public function getMappingResultsForProperty(JoinPointInterface $joinPoint): Result
+    {
+        $this->viewHelper = $joinPoint->getProxy();
+
+        if (!$this->getTemplateVariableContainer()->exists('validationResults')) {
+            return $joinPoint->getAdviceChain()->proceed($joinPoint);
+        }
+
+        return $this->getTemplateVariableContainer()->get('validationResults');
+    }
+
+    /**
      * @Flow\Around("within(Neos\FluidAdaptor\ViewHelpers\Form\AbstractFormFieldViewHelper) && method(.*->setArguments())")
      *
      * @param JoinPointInterface $joinPoint
      */
     public function setArguments(JoinPointInterface $joinPoint)
     {
-        $arguments = $joinPoint->getMethodArgument('arguments');
-
-        /** @var AbstractFormFieldViewHelper $viewHelper */
         $this->viewHelper = $joinPoint->getProxy();
+
+        $arguments = $joinPoint->getMethodArgument('arguments');
 
         if ($this->hasArgumentDefinition('errorClass')
             && $arguments['errorClass'] === 'f3-form-error') {

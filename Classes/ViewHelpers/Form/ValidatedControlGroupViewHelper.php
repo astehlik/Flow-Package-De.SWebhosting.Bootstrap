@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
@@ -14,8 +15,10 @@ namespace De\SWebhosting\Bootstrap\ViewHelpers\Form;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+use De\SWebhosting\Bootstrap\Messages\MessageCollector;
+use De\SWebhosting\Bootstrap\Messages\MessageSettings;
+use InvalidArgumentException;
 use Neos\Error\Messages\Result;
-use Neos\Flow\Mvc\ActionRequest;
 use Neos\FluidAdaptor\Core\ViewHelper\AbstractTagBasedViewHelper;
 
 /**
@@ -33,40 +36,13 @@ class ValidatedControlGroupViewHelper extends AbstractTagBasedViewHelper
         $this->registerUniversalTagAttributes();
 
         $this->registerArgument(
-            'for',
-            'string',
-            'The name of the property for which the validation results should be checked.',
-            false,
-            ''
-        );
-        $this->registerArgument(
-            'property',
-            'string',
-            'Alias for "for" to prevent IDE errors because the IDs do not exists.',
-            false,
-            ''
-        );
-        $this->registerArgument(
-            'formControlId',
-            'string',
-            'The HTML ID of the form field.',
-            false,
-            ''
-        );
-        $this->registerArgument(
-            'as',
-            'string',
-            'The variable name in which the validation results should be stored.',
-            false,
-            'validationResults'
-        );
-        $this->registerArgument(
             'defaultClass',
             'string',
             'This class will always be added to the list of classes for the tag unless it is empty.',
             false,
             'form-group'
         );
+
         $this->registerArgument(
             'errorClass',
             'string',
@@ -88,7 +64,35 @@ class ValidatedControlGroupViewHelper extends AbstractTagBasedViewHelper
             false,
             'has-notice'
         );
-        $this->registerArgument('tagName', 'string', 'The tag name that should be used. Defaults to "div".', false);
+
+        $this->registerArgument('tagName', 'string', 'The tag name that should be used.', false, 'div');
+        $this->registerArgument('formControlId', 'string', 'HTML ID of the enclosed form field', false, '');
+
+        $this->registerArgument(
+            'for',
+            'string',
+            'The name of the property for which the validation results should be checked.',
+            false,
+            ''
+        );
+        $this->registerArgument(
+            'property',
+            'string',
+            'Alias for "for" to prevent IDE errors because the IDs do not exists.',
+            false,
+            ''
+        );
+        $this->registerArgument(
+            'properties',
+            'array',
+            'Use this if the validation results of multiple properties should be checked.',
+            false,
+            ''
+        );
+        $this->registerArgument('includeChildProperties', 'array', '', false, []);
+
+        $this->registerArgument('translationPrefix', 'string', '', false, 'error.');
+        $this->registerArgument('excludeForPartsFromTranslationKey', 'array', '', false, []);
     }
 
     /**
@@ -98,39 +102,32 @@ class ValidatedControlGroupViewHelper extends AbstractTagBasedViewHelper
      */
     public function render()
     {
-        $for = $this->arguments['for'] ?: $this->arguments['property'];
-        $as = $this->arguments['as'];
-
         if ($this->arguments['defaultClass'] !== '') {
             $this->appendClassForTag($this->arguments['defaultClass']);
         }
 
-        if (!empty($this->arguments['tagName'])) {
-            $this->tag->setTagName($this->arguments['tagName']);
-        }
+        $this->tag->setTagName($this->arguments['tagName']);
 
-        $request = $this->controllerContext->getRequest();
-        /** @var $validationResults Result */
-        $validationResults = $request->getInternalArgument('__submittedArgumentValidationResults');
-        if ($validationResults !== null && $for !== '') {
-            $validationResults = $validationResults->forProperty($for);
-            if ($validationResults->hasErrors()) {
-                $this->appendClassForTag($this->arguments['errorClass']);
-            } elseif ($validationResults->hasWarnings()) {
-                $this->appendClassForTag($this->arguments['warningClass']);
-            } elseif ($validationResults->hasNotices()) {
-                $this->appendClassForTag($this->arguments['noticeClass']);
-            }
-        }
+        $messageSettings = MessageSettings::createForViewHelper(
+            $this->controllerContext->getRequest(),
+            $this->arguments
+        );
 
-        $this->templateVariableContainer->add($as, ['validationResults' => $validationResults, 'for' => $for]);
+        $messageCollector = new MessageCollector($messageSettings);
+        $mergedResult = $messageCollector->collectResultsMerged();
+
+        $this->addResultClasses($mergedResult);
+
+        $this->viewHelperVariableContainer->add(static::class, 'messageSettings', $messageSettings);
+        $this->templateVariableContainer->add('validationResults', $mergedResult);
         $this->templateVariableContainer->add('formGroupFieldId', $this->arguments['formControlId']);
 
         $this->tag->setContent($this->renderChildren());
         $result = $this->tag->render();
 
         $this->templateVariableContainer->remove('formGroupFieldId');
-        $this->templateVariableContainer->remove($as);
+        $this->templateVariableContainer->remove('validationResults');
+        $this->viewHelperVariableContainer->remove(static::class, 'messageSettings');
 
         return $result;
     }
@@ -140,7 +137,7 @@ class ValidatedControlGroupViewHelper extends AbstractTagBasedViewHelper
      *
      * @param string $class
      */
-    protected function appendClassForTag($class)
+    protected function appendClassForTag(string $class)
     {
         $currentClass = $this->tag->getAttribute('class');
 
@@ -149,5 +146,16 @@ class ValidatedControlGroupViewHelper extends AbstractTagBasedViewHelper
         }
 
         $this->tag->addAttribute('class', $class);
+    }
+
+    private function addResultClasses(Result $propertyResults): void
+    {
+        if ($propertyResults->hasErrors()) {
+            $this->appendClassForTag($this->arguments['errorClass']);
+        } elseif ($propertyResults->hasWarnings()) {
+            $this->appendClassForTag($this->arguments['warningClass']);
+        } elseif ($propertyResults->hasNotices()) {
+            $this->appendClassForTag($this->arguments['noticeClass']);
+        }
     }
 }
